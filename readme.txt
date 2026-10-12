@@ -4,7 +4,7 @@ Tags: admin notices, quiet admin, notice manager, snooze notices, clean admin, d
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.10
+Stable tag: 1.0.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,11 @@ Yes. WP Quiet Admin is free and open-source software by RemarkablePC / David Hew
 7. Dedicated Rules & Settings panel for Show in Admin, Mute Everywhere, and pass-through configuration.
 
 == Changelog ==
+
+= 1.0.11 =
+* Fix: Prevented notice icon collisions where plugins using pseudo-element icons (such as LiteSpeed Cache's lightning bolt badge) overlapped notice body text.
+* Fix: Enhanced plugin source detection engine with signature dictionaries, underscore normalization, base slug stems, and distinctive token matching, resolving LiteSpeed Cache and other utilities being categorized as "Unknown Plugin / System".
+* Feature: Added automatic self-healing to stored notices so previously unclassified notices are upgraded to their verified plugin names on the next page view.
 
 = 1.0.10 =
 * Feature: Added interactive Sub-Filter Pill Bar to Archive tab (All Dismissed, Critical Alerts, Updates & Warnings, Reviews & Promos, WordPress Core) with real-time counters and zero-reload instant filtering.

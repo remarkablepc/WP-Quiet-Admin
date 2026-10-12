@@ -175,4 +175,3 @@ class WP_Quiet_Admin_Classifier {
 		return $clean;
 	}
 }
-}

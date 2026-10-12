@@ -23,3 +23,13 @@ error_log
 .idea/
 *.sublime-project
 *.sublime-workspace
+
+# Cloud Sync Collisions
+.dropbox*
+*.dropbox.attr
+.insync*
+*.sync
+*conflicted copy*
+*.conflict
+* ([0-9])*
+* ([0-9]).*

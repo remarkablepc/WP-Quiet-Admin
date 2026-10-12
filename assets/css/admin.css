@@ -527,6 +527,26 @@
 	opacity: 1 !important;
 }
 
+/* Preserve layout & gutter for LiteSpeed Cache and icon-bearing notices */
+.qa-raw-notice-wrapper .litespeed_icon,
+.qa-raw-notice-wrapper .notice.litespeed_icon {
+	padding-left: 36px !important;
+	position: relative !important;
+	min-height: 28px;
+}
+
+.qa-raw-notice-wrapper .litespeed_icon::before {
+	top: 50% !important;
+	transform: translateY(-50%) !important;
+	left: 4px !important;
+}
+
+.qa-raw-notice-wrapper .litespeed_icon p {
+	margin: 0 !important;
+	padding: 2px 0 !important;
+	line-height: 1.5;
+}
+
 .qa-card-footer {
 	display: flex;
 	justify-content: space-between;

@@ -282,7 +282,7 @@ class WP_Quiet_Admin_Notice_Manager {
 	 * @param array  $installed_plugins
 	 * @return array
 	 */
-	protected function detect_plugin_source( $html, $installed_plugins ) {
+	public function detect_plugin_source( $html, $installed_plugins ) {
 		$lower_html = strtolower( $html );
 
 		// Check if it's WordPress Core
@@ -300,13 +300,60 @@ class WP_Quiet_Admin_Notice_Manager {
 			);
 		}
 
-		// Search for installed plugin slugs or names in classes, IDs, links, and text
-		foreach ( $installed_plugins as $slug => $data ) {
-			$clean_slug = strtolower( $slug );
-			$clean_name = strtolower( $data['name'] );
+		// Known high-frequency plugin identifiers, acronyms, and class prefixes dictionary
+		$known_signatures = array(
+			'litespeed-cache'              => array( 'litespeed', 'lscwp', 'litespeed_icon', 'lscwp_' ),
+			'all-in-one-wp-migration'      => array( 'ai1wm', 'servmask' ),
+			'contact-form-7'               => array( 'wpcf7', 'wpcf7-', 'wpcf7_' ),
+			'contact-form-7-image-captcha' => array( 'cf7ic', 'cf7ic_' ),
+			'modern-events-calendar'       => array( 'mec_', 'mec-', 'mec-events' ),
+			'custom-facebook-feed-pro'     => array( 'cff_', 'cff-', 'cff_notice', 'smashballoon' ),
+			'custom-facebook-feed'         => array( 'cff_', 'cff-', 'cff_notice', 'smashballoon' ),
+			'instagram-feed'               => array( 'sbi_', 'sbi-', 'sb_instagram' ),
+			'custom-twitter-feeds'         => array( 'ctf_', 'ctf-', 'ctf_notice' ),
+			'feeds-for-youtube'            => array( 'sby_', 'sby-', 'sby_notice' ),
+			'cool-timeline-pro'            => array( 'ctl-', 'ctl_', 'cool-timeline' ),
+			'cool-timeline'                => array( 'ctl-', 'ctl_', 'cool-timeline' ),
+			'wp-smushit'                   => array( 'smush', 'wp-smush', 'frash-notice' ),
+			'wp-smush-pro'                 => array( 'smush', 'wp-smush', 'frash-notice' ),
+			'really-simple-security'       => array( 'rsssl', 'really-simple-ssl', 'really-simple-security' ),
+			'wp-social-ninja'              => array( 'wpsocialninja', 'wpsn' ),
+			'quick-featured-images'        => array( 'qfi-', 'qfi_', 'quick-featured-images' ),
+			'easy-facebook-likebox'        => array( 'easy-facebook-likebox', 'feed-them-all' ),
+			'mailchimp-for-wp'             => array( 'mc4wp', 'mc4wp-' ),
+			'fileorganizer'                => array( 'fileorganizer' ),
+			'insert-headers-and-footers'   => array( 'wpcode', 'wpcode-' ),
+			'wp-mail-smtp'                 => array( 'wp-mail-smtp', 'wpmailsmtp' ),
+			'use-any-font'                 => array( 'use-any-font', 'uaf_' ),
+			'just-duplicate-post'          => array( 'just-duplicate' ),
+			'robo-gallery'                 => array( 'robo-gallery', 'rsg_gallery' ),
+		);
 
-			// Check for slug in HTML classes, IDs, or URLs
-			if ( false !== strpos( $lower_html, $clean_slug ) ) {
+		// Check known signatures against installed plugins
+		foreach ( $known_signatures as $sig_slug => $markers ) {
+			if ( isset( $installed_plugins[ $sig_slug ] ) ) {
+				foreach ( $markers as $marker ) {
+					if ( false !== strpos( $lower_html, $marker ) ) {
+						return array(
+							'slug'    => $sig_slug,
+							'name'    => $installed_plugins[ $sig_slug ]['name'],
+							'is_core' => false,
+						);
+					}
+				}
+			}
+		}
+
+		// General check: exact slug, underscore version, base stem, or name matches
+		$stop_words = array( 'wordpress', 'plugin', 'plugins', 'custom', 'simple', 'advanced', 'ultimate', 'easy', 'smart', 'super', 'online', 'official', 'settings', 'manager', 'addons', 'addon', 'tools', 'tool', 'feed', 'feeds', 'forms', 'form', 'mail', 'page', 'site', 'core', 'free', 'lite', 'best' );
+
+		foreach ( $installed_plugins as $slug => $data ) {
+			$clean_slug      = strtolower( $slug );
+			$underscore_slug = str_replace( '-', '_', $clean_slug );
+			$clean_name      = strtolower( $data['name'] );
+
+			// Check for exact slug or slug with underscores in HTML classes, IDs, or URLs
+			if ( false !== strpos( $lower_html, $clean_slug ) || false !== strpos( $lower_html, $underscore_slug ) ) {
 				return array(
 					'slug'    => $slug,
 					'name'    => $data['name'],
@@ -314,13 +361,37 @@ class WP_Quiet_Admin_Notice_Manager {
 				);
 			}
 
-			// Check for plugin name in text if distinctive (> 4 chars)
+			// Check primary base slug (removing suffixes like -cache, -pro, -lite, -free, -addon, -plugin)
+			$base_slug = preg_replace( '/[_\-](?:pro|free|addon|addons|premium|extension|cache|manager|builder|lite|table|settings|plugin|for-wp|wp)$/i', '', $clean_slug );
+			if ( strlen( $base_slug ) >= 4 && false !== strpos( $lower_html, $base_slug ) ) {
+				return array(
+					'slug'    => $slug,
+					'name'    => $data['name'],
+					'is_core' => false,
+				);
+			}
+
+			// Check full plugin name in text if distinctive (> 4 chars)
 			if ( strlen( $clean_name ) > 4 && false !== strpos( $lower_html, $clean_name ) ) {
 				return array(
 					'slug'    => $slug,
 					'name'    => $data['name'],
 					'is_core' => false,
 				);
+			}
+
+			// Check individual distinctive words from the plugin Name (excluding generic words)
+			$words = preg_split( '/[\s\-_]+/', $clean_name );
+			foreach ( $words as $word ) {
+				if ( strlen( $word ) >= 5 && ! in_array( $word, $stop_words, true ) ) {
+					if ( false !== strpos( $lower_html, $word ) ) {
+						return array(
+							'slug'    => $slug,
+							'name'    => $data['name'],
+							'is_core' => false,
+						);
+					}
+				}
 			}
 		}
 
@@ -342,16 +413,31 @@ class WP_Quiet_Admin_Notice_Manager {
 			$notices = array();
 		}
 
-		// Periodic cleanup of expired notices
+		// Periodic cleanup of expired notices & auto-upgrade of previously unrecognized notices
 		$retention_days = (int) $this->settings->get( 'retention_days', 7 );
 		$cutoff         = time() - ( $retention_days * DAY_IN_SECONDS );
 		$cleaned        = false;
+		$installed      = null;
 
 		foreach ( $notices as $id => $notice ) {
 			// Auto-awaken expired snoozes
 			if ( ! empty( $notice['snoozed_until'] ) && time() >= (int) $notice['snoozed_until'] ) {
 				$notices[ $id ]['snoozed_until'] = 0;
 				$cleaned = true;
+			}
+
+			// Dynamically resolve existing notices that were previously marked Unknown Plugin / System
+			if ( ( empty( $notice['source_slug'] ) || ( isset( $notice['source_name'] ) && 'Unknown Plugin / System' === $notice['source_name'] ) ) && ! empty( $notice['html'] ) ) {
+				if ( null === $installed ) {
+					$installed = $this->settings->get_installed_plugins();
+				}
+				$resolved = $this->detect_plugin_source( $notice['html'], $installed );
+				if ( ! empty( $resolved['slug'] ) ) {
+					$notices[ $id ]['source_slug'] = $resolved['slug'];
+					$notices[ $id ]['source_name'] = $resolved['name'];
+					$notices[ $id ]['is_core']     = $resolved['is_core'];
+					$cleaned                       = true;
+				}
 			}
 
 			// SAFETY REASSURANCE: Never auto-purge active high-priority (critical) or core alerts.
