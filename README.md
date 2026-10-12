@@ -90,4 +90,4 @@ If this plugin saves you time and restores sanity to your WordPress workflow, pl
 
 Copyright (c) 2026 RemarkablePC / David Hewitt.
 
-Licensed under the [GNU General Public License v2.0 or later (MIT compatible)](LICENSE).
+Licensed under the [GNU General Public License v2.0 or later](LICENSE).

@@ -70,7 +70,7 @@ Yes. Clicking "Mute Plugin" (or selecting "Mute Everywhere" in settings) complet
 When you dismiss or snooze a notice (or batch of notices), an interactive toast notification appears in the lower corner with an Undo button and keyboard shortcut reminder (Ctrl+Z or Cmd+Z). You can also visit the Archive or Snoozed tab anytime to restore or wake up notices.
 
 = Is WP Quiet Admin open source? =
-Yes. WP Quiet Admin is free and open-source software by RemarkablePC / David Hewitt licensed under the GNU General Public License version 2 or later (MIT compatible).
+Yes. WP Quiet Admin is free and open-source software by RemarkablePC / David Hewitt licensed under the GNU General Public License version 2 or later.
 
 == Screenshots ==
 

@@ -10,7 +10,7 @@
  * Author URI:        https://remarkablepc.com/
  * Text Domain:       wp-quiet-admin
  * Domain Path:       /languages
- * License:           GPL v2 or later (MIT compatible)
+ * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  *
  * Copyright (c) 2026 RemarkablePC / David Hewitt
