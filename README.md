@@ -3,9 +3,12 @@
 [![License: GPL v2](https://img.shields.io/badge/License-GPLv2-blue.svg)](https://www.gnu.org/licenses/gpl-2.0)
 [![WordPress](https://img.shields.io/badge/WordPress-5.8%2B-21759b.svg?logo=wordpress)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-777bb4.svg?logo=php)](https://www.php.net/)
-[![Release](https://img.shields.io/badge/version-1.0.10-green.svg)](https://github.com/remarkablepc/wp-quiet-admin/releases)
+[![Release](https://img.shields.io/badge/version-1.0.10-green.svg)](https://github.com/remarkablepc/WP-Quiet-Admin/releases)
 [![Sponsor @remarkablepc](https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ea4aaa?logo=githubsponsors)](https://github.com/sponsors/remarkablepc?utm_source=wp-quiet-admin&utm_medium=github-readme)
 [![Donate PayPal](https://img.shields.io/badge/Donate-PayPal%20%2F%20Venmo-00457C?logo=paypal)](https://www.paypal.com/ncp/payment/EKH76RTYHH24S)
+
+> **Quick Download**: [Download Latest wp-quiet-admin.zip (v1.0.10)](https://github.com/remarkablepc/WP-Quiet-Admin/releases/download/v1.0.10/wp-quiet-admin.zip)  
+> *Always install using the official `wp-quiet-admin.zip` release asset. Do not use GitHub's green "Code → Download ZIP" button for WordPress installation, as GitHub names the inner folder `WP-Quiet-Admin-main`, which WordPress handles as an incompatible duplicate plugin.*
 
 Tame the noisy WordPress dashboard. WP Quiet Admin acts like an **Intelligent Priority Inbox** for admin notices, triaging banners into clean priority tabs with snooze controls, a zero-table audit trail, and instant safety pass-through.
 
@@ -65,7 +68,7 @@ Accidentally dismissed a notice? Press **Ctrl+Z** (or **Cmd+Z** on Mac) or click
 ### Manual Installation
 1. Clone this repository into `/wp-content/plugins/wp-quiet-admin/`:
    ```bash
-   git clone https://github.com/remarkablepc/wp-quiet-admin.git
+   git clone https://github.com/remarkablepc/WP-Quiet-Admin.git wp-quiet-admin
    ```
 2. Activate **WP Quiet Admin** from the WordPress **Plugins** screen.
 3. Access the notification hub under **Dashboard → Quiet Admin** or via the traffic-light pill counters in the top toolbar.

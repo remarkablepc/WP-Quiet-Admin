@@ -20,12 +20,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+// Prevent duplicate activation collision if another copy or folder of WP Quiet Admin is already active.
+if ( defined( 'WP_QUIET_ADMIN_VERSION' ) || class_exists( 'WP_Quiet_Admin', false ) || function_exists( 'wp_quiet_admin' ) ) {
+	add_action( 'admin_notices', function() {
+		echo '<div class="notice notice-warning is-dismissible"><p><strong>' . esc_html__( 'WP Quiet Admin:', 'wp-quiet-admin' ) . '</strong> ' . esc_html__( 'Another copy or folder of WP Quiet Admin is already active. Please deactivate the existing version before activating this one.', 'wp-quiet-admin' ) . '</p></div>';
+	} );
+	return;
+}
+
 // Define Plugin Constants
-define( 'WP_QUIET_ADMIN_VERSION', '1.0.10' );
-define( 'WP_QUIET_ADMIN_FILE', __FILE__ );
-define( 'WP_QUIET_ADMIN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'WP_QUIET_ADMIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'WP_QUIET_ADMIN_BASENAME', plugin_basename( __FILE__ ) );
+defined( 'WP_QUIET_ADMIN_VERSION' ) || define( 'WP_QUIET_ADMIN_VERSION', '1.0.10' );
+defined( 'WP_QUIET_ADMIN_FILE' ) || define( 'WP_QUIET_ADMIN_FILE', __FILE__ );
+defined( 'WP_QUIET_ADMIN_DIR' ) || define( 'WP_QUIET_ADMIN_DIR', plugin_dir_path( __FILE__ ) );
+defined( 'WP_QUIET_ADMIN_URL' ) || define( 'WP_QUIET_ADMIN_URL', plugin_dir_url( __FILE__ ) );
+defined( 'WP_QUIET_ADMIN_BASENAME' ) || define( 'WP_QUIET_ADMIN_BASENAME', plugin_basename( __FILE__ ) );
 
 // Autoload / Include required classes
 require_once WP_QUIET_ADMIN_DIR . 'includes/class-classifier.php';
@@ -34,6 +42,7 @@ require_once WP_QUIET_ADMIN_DIR . 'includes/class-notice-manager.php';
 require_once WP_QUIET_ADMIN_DIR . 'includes/class-admin-bar.php';
 require_once WP_QUIET_ADMIN_DIR . 'includes/class-admin-page.php';
 
+if ( ! class_exists( 'WP_Quiet_Admin', false ) ) {
 /**
  * Main Plugin Bootstrap Class
  */
@@ -212,12 +221,15 @@ final class WP_Quiet_Admin {
 		return $links;
 	}
 }
+}
 
+if ( ! function_exists( 'wp_quiet_admin' ) ) {
 /**
  * Initialize WP Quiet Admin.
  */
 function wp_quiet_admin() {
 	return WP_Quiet_Admin::instance();
+}
 }
 
 // Start the plugin

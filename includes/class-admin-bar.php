@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! class_exists( 'WP_Quiet_Admin_Admin_Bar', false ) ) {
 class WP_Quiet_Admin_Admin_Bar {
 
 	/**
@@ -163,4 +164,5 @@ class WP_Quiet_Admin_Admin_Bar {
 			'href'   => add_query_arg( 'tab', 'settings', $hub_url ),
 		) );
 	}
+}
 }

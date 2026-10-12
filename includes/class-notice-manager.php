@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! class_exists( 'WP_Quiet_Admin_Notice_Manager', false ) ) {
 class WP_Quiet_Admin_Notice_Manager {
 
 	/**
@@ -1077,4 +1078,5 @@ class WP_Quiet_Admin_Notice_Manager {
 			'woken_ids' => $woken_ids,
 		) );
 	}
+}
 }

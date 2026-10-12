@@ -7,6 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! class_exists( 'WP_Quiet_Admin_Settings', false ) ) {
 class WP_Quiet_Admin_Settings {
 
 	/**
@@ -277,4 +278,5 @@ class WP_Quiet_Admin_Settings {
 
 		return $formatted;
 	}
+}
 }

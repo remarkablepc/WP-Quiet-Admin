@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! class_exists( 'WP_Quiet_Admin_Admin_Page', false ) ) {
 class WP_Quiet_Admin_Admin_Page {
 
 	/**
@@ -1604,4 +1605,5 @@ class WP_Quiet_Admin_Admin_Page {
 
 		return $html;
 	}
+}
 }

@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! class_exists( 'WP_Quiet_Admin_Classifier', false ) ) {
 class WP_Quiet_Admin_Classifier {
 
 	/**
@@ -173,4 +174,5 @@ class WP_Quiet_Admin_Classifier {
 		}
 		return $clean;
 	}
+}
 }
