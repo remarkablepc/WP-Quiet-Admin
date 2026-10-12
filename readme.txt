@@ -88,6 +88,8 @@ Yes. WP Quiet Admin is free and open-source software by RemarkablePC / David Hew
 * Feature: Added interactive Sub-Filter Pill Bar to Archive tab (All Dismissed, Critical Alerts, Updates & Warnings, Reviews & Promos, WordPress Core) with real-time counters and zero-reload instant filtering.
 * UI: Enhanced Archive cards with color-coded dashed borders reflecting original notice priorities (Red dashed for Critical, Yellow dashed for Warnings, Green dashed for Promos, Blue dashed for Core) to easily identify dismissed critical alerts.
 * UI: Added distinct color priority pill badges alongside the [Dismissed] badge on each archived notice card.
+* UI: Replaced glyph fallbacks in WordPress Admin Bar dropdown with pure CSS luminous circular status orbs for guaranteed rendering across all environments.
+* Community: Added tasteful "Sponsor on GitHub" and "Donate via PayPal / Venmo" support links to the Plugins list table metadata and Rules & Settings panel.
 * Refinement: "Clear All Notices" in the header safely archives all active notices rather than destroying them, making it accessible to all administrators without risk of data loss.
 * Security: Strictly enforced backend Super Admin / Chief Administrator authorization on permanent database purge operations.
 
