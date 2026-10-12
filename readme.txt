@@ -66,6 +66,15 @@ When you set a plugin to "Show in Admin" (either from its notice card or in Rule
 = Can I completely mute a spammy plugin? =
 Yes. Clicking "Mute Plugin" (or selecting "Mute Everywhere" in settings) completely purges its notices from storage and blocks any new notices from that plugin across the entire dashboard.
 
+= Why doesn't WP Quiet Admin delete ads and sidebar cards inside plugin settings pages? =
+It is tempting to think: "If it looks like an ad, why doesn't WP Quiet Admin delete it?"
+
+There is a vital architectural reason why reputable notice managers never blindly scrape or delete elements from inside other plugins' settings bodies.
+
+If WP Quiet Admin started injecting aggressive DOM scrapers to delete sidebars or layout containers from third-party settings pages, it would inevitably cause catastrophic layout breakage: collapsing responsive grids, deleting license key activation boxes, removing legitimate support links, hiding save buttons, and breaking JavaScript event handlers.
+
+WP Quiet Admin is engineered as a safe, respectful traffic controller for the WordPress notification bus. It silences the floating banners that interrupt your workflow across the dashboard without tampering with the internal anatomy of third-party plugin screens.
+
 = How does the Undo feature work? =
 When you dismiss or snooze a notice (or batch of notices), an interactive toast notification appears in the lower corner with an Undo button and keyboard shortcut reminder (Ctrl+Z or Cmd+Z). You can also visit the Archive or Snoozed tab anytime to restore or wake up notices.
 
