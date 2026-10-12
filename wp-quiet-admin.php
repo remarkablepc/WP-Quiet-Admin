@@ -119,6 +119,7 @@ final class WP_Quiet_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_assets' ) );
 		add_filter( 'plugin_action_links_' . WP_QUIET_ADMIN_BASENAME, array( $this, 'add_action_links' ) );
+		add_filter( 'plugin_row_meta', array( $this, 'add_plugin_row_meta' ), 10, 2 );
 	}
 
 	/**
@@ -191,6 +192,24 @@ final class WP_Quiet_Admin {
 			'<a href="' . esc_url( admin_url( 'index.php?page=wp-quiet-admin&tab=settings' ) ) . '">' . __( 'Settings', 'wp-quiet-admin' ) . '</a>',
 		);
 		return array_merge( $custom_links, $links );
+	}
+
+	/**
+	 * Add custom metadata links below the plugin description on Plugins page.
+	 *
+	 * @param string[] $links An array of the plugin's metadata, including the version, author, and author URI.
+	 * @param string   $file  Path to the plugin file relative to the plugins directory.
+	 * @return string[]
+	 */
+	public function add_plugin_row_meta( $links, $file ) {
+		if ( WP_QUIET_ADMIN_BASENAME === $file ) {
+			$sponsor_link = '<a href="' . esc_url( 'https://github.com/sponsors/remarkablepc?utm_source=wp-quiet-admin&utm_medium=plugin-row-meta' ) . '" target="_blank" rel="noopener noreferrer" style="color: #ea4aaa; font-weight: 600;"><span class="dashicons dashicons-heart" style="font-size: 14px; width: 14px; height: 14px; vertical-align: -2px; margin-right: 2px;"></span>' . esc_html__( 'Sponsor on GitHub', 'wp-quiet-admin' ) . '</a>';
+			$paypal_link  = '<a href="' . esc_url( 'https://www.paypal.com/ncp/payment/EKH76RTYHH24S' ) . '" target="_blank" rel="noopener noreferrer" style="color: #0070ba; font-weight: 600;"><span class="dashicons dashicons-money-alt" style="font-size: 14px; width: 14px; height: 14px; vertical-align: -2px; margin-right: 2px;"></span>' . esc_html__( 'Donate via PayPal / Venmo', 'wp-quiet-admin' ) . '</a>';
+
+			$links[] = $sponsor_link;
+			$links[] = $paypal_link;
+		}
+		return $links;
 	}
 }
 

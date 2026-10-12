@@ -914,13 +914,14 @@
 		if ($('#wp-admin-bar-wp-quiet-admin-wordpress').length) {
 			var wpCount = counts.wordpress || 0;
 			$('#wp-admin-bar-wp-quiet-admin-wordpress .qa-sub-count').text(wpCount);
-			var $icon = $('#wp-admin-bar-wp-quiet-admin-wordpress .dashicons-wordpress-alt');
+			var $orb = $('#wp-admin-bar-wp-quiet-admin-wordpress .qa-sub-orb');
+			$orb.removeClass('qa-orb-red qa-orb-yellow qa-orb-blue');
 			if (counts.wp_high > 0) {
-				$icon.css('color', '#d63638');
+				$orb.addClass('qa-orb-red');
 			} else if (counts.wp_medium > 0) {
-				$icon.css('color', '#dba617');
+				$orb.addClass('qa-orb-yellow');
 			} else {
-				$icon.css('color', '#2271b1');
+				$orb.addClass('qa-orb-blue');
 			}
 		}
 

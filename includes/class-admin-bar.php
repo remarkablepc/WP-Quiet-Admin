@@ -95,16 +95,16 @@ class WP_Quiet_Admin_Admin_Bar {
 
 		// Sub-item 1: WordPress Core (First in dropdown)
 		$wp_count_badge = $counts['wordpress'];
-		$wp_icon_color  = '#2271b1';
+		$wp_orb_class   = 'qa-orb-blue';
 		if ( ! empty( $counts['wp_high'] ) && $counts['wp_high'] > 0 ) {
-			$wp_icon_color = '#d63638';
+			$wp_orb_class = 'qa-orb-red';
 		} elseif ( ! empty( $counts['wp_medium'] ) && $counts['wp_medium'] > 0 ) {
-			$wp_icon_color = '#dba617';
+			$wp_orb_class = 'qa-orb-yellow';
 		}
 		$wp_admin_bar->add_node( array(
 			'parent' => 'wp-quiet-admin',
 			'id'     => 'wp-quiet-admin-wordpress',
-			'title'  => '<span class="qa-sub-item-wrap"><span class="qa-sub-left"><span class="dashicons dashicons-wordpress-alt" style="color: ' . esc_attr( $wp_icon_color ) . ';"></span> ' . esc_html__( 'WordPress Core', 'wp-quiet-admin' ) . '</span><span class="qa-sub-count">' . absint( $wp_count_badge ) . '</span></span>',
+			'title'  => '<span class="qa-sub-item-wrap"><span class="qa-sub-left"><span class="qa-sub-orb ' . esc_attr( $wp_orb_class ) . '"></span> ' . esc_html__( 'WordPress Core', 'wp-quiet-admin' ) . '</span><span class="qa-sub-count">' . absint( $wp_count_badge ) . '</span></span>',
 			'href'   => add_query_arg( 'tab', 'wordpress', $hub_url ),
 		) );
 
@@ -112,7 +112,7 @@ class WP_Quiet_Admin_Admin_Bar {
 		$wp_admin_bar->add_node( array(
 			'parent' => 'wp-quiet-admin',
 			'id'     => 'wp-quiet-admin-high',
-			'title'  => '<span class="qa-sub-item-wrap"><span class="qa-sub-left"><span class="dashicons dashicons-warning" style="color: #d63638;"></span> ' . esc_html__( 'Critical (High)', 'wp-quiet-admin' ) . '</span><span class="qa-sub-count">' . absint( $counts['high'] ) . '</span></span>',
+			'title'  => '<span class="qa-sub-item-wrap"><span class="qa-sub-left"><span class="qa-sub-orb qa-orb-red"></span> ' . esc_html__( 'Critical (High)', 'wp-quiet-admin' ) . '</span><span class="qa-sub-count">' . absint( $counts['high'] ) . '</span></span>',
 			'href'   => add_query_arg( 'tab', 'high', $hub_url ),
 		) );
 
@@ -120,7 +120,7 @@ class WP_Quiet_Admin_Admin_Bar {
 		$wp_admin_bar->add_node( array(
 			'parent' => 'wp-quiet-admin',
 			'id'     => 'wp-quiet-admin-medium',
-			'title'  => '<span class="qa-sub-item-wrap"><span class="qa-sub-left"><span class="dashicons dashicons-flag" style="color: #dba617;"></span> ' . esc_html__( 'Warnings & Updates', 'wp-quiet-admin' ) . '</span><span class="qa-sub-count">' . absint( $counts['medium'] ) . '</span></span>',
+			'title'  => '<span class="qa-sub-item-wrap"><span class="qa-sub-left"><span class="qa-sub-orb qa-orb-yellow"></span> ' . esc_html__( 'Warnings & Updates', 'wp-quiet-admin' ) . '</span><span class="qa-sub-count">' . absint( $counts['medium'] ) . '</span></span>',
 			'href'   => add_query_arg( 'tab', 'medium', $hub_url ),
 		) );
 
@@ -129,7 +129,7 @@ class WP_Quiet_Admin_Admin_Bar {
 		$wp_admin_bar->add_node( array(
 			'parent' => 'wp-quiet-admin',
 			'id'     => 'wp-quiet-admin-muted',
-			'title'  => '<span class="qa-sub-item-wrap"><span class="qa-sub-left"><span class="dashicons dashicons-megaphone" style="color: #00a32a;"></span> ' . esc_html__( 'Reviews & Promos', 'wp-quiet-admin' ) . '</span><span class="qa-sub-count">' . absint( $low_and_other ) . '</span></span>',
+			'title'  => '<span class="qa-sub-item-wrap"><span class="qa-sub-left"><span class="qa-sub-orb qa-orb-green"></span> ' . esc_html__( 'Reviews & Promos', 'wp-quiet-admin' ) . '</span><span class="qa-sub-count">' . absint( $low_and_other ) . '</span></span>',
 			'href'   => add_query_arg( 'tab', 'muted', $hub_url ),
 		) );
 
@@ -139,7 +139,7 @@ class WP_Quiet_Admin_Admin_Bar {
 			$wp_admin_bar->add_node( array(
 				'parent' => 'wp-quiet-admin',
 				'id'     => 'wp-quiet-admin-snoozed',
-				'title'  => '<span class="qa-sub-item-wrap"><span class="qa-sub-left"><span class="dashicons dashicons-clock" style="color: #8250df;"></span> ' . esc_html__( 'Snoozed', 'wp-quiet-admin' ) . '</span><span class="qa-sub-count">' . absint( $snoozed_count ) . '</span></span>',
+				'title'  => '<span class="qa-sub-item-wrap"><span class="qa-sub-left"><span class="qa-sub-orb qa-orb-purple"></span> ' . esc_html__( 'Snoozed', 'wp-quiet-admin' ) . '</span><span class="qa-sub-count">' . absint( $snoozed_count ) . '</span></span>',
 				'href'   => add_query_arg( 'tab', 'snoozed', $hub_url ),
 			) );
 		}
@@ -150,7 +150,7 @@ class WP_Quiet_Admin_Admin_Bar {
 			$wp_admin_bar->add_node( array(
 				'parent' => 'wp-quiet-admin',
 				'id'     => 'wp-quiet-admin-history',
-				'title'  => '<span class="qa-sub-item-wrap"><span class="qa-sub-left"><span class="dashicons dashicons-backup" style="color: #8c8f94;"></span> ' . esc_html__( 'Archive', 'wp-quiet-admin' ) . '</span><span class="qa-sub-count">' . absint( $archive_count ) . '</span></span>',
+				'title'  => '<span class="qa-sub-item-wrap"><span class="qa-sub-left"><span class="qa-sub-orb qa-orb-grey"></span> ' . esc_html__( 'Archive', 'wp-quiet-admin' ) . '</span><span class="qa-sub-count">' . absint( $archive_count ) . '</span></span>',
 				'href'   => add_query_arg( 'tab', 'history', $hub_url ),
 			) );
 		}
@@ -159,7 +159,7 @@ class WP_Quiet_Admin_Admin_Bar {
 		$wp_admin_bar->add_node( array(
 			'parent' => 'wp-quiet-admin',
 			'id'     => 'wp-quiet-admin-settings',
-			'title'  => '<span class="qa-sub-item-wrap"><span class="qa-sub-left"><span class="dashicons dashicons-admin-generic" style="color: #72aee6;"></span> ' . esc_html__( 'Rules & Settings', 'wp-quiet-admin' ) . '</span></span>',
+			'title'  => '<span class="qa-sub-item-wrap"><span class="qa-sub-left"><span class="qa-sub-orb qa-orb-gear"></span> ' . esc_html__( 'Rules & Settings', 'wp-quiet-admin' ) . '</span></span>',
 			'href'   => add_query_arg( 'tab', 'settings', $hub_url ),
 		) );
 	}
