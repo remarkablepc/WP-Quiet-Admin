@@ -5,6 +5,9 @@
 	'use strict';
 
 	$(document).ready(function () {
+		// 1. Defensively silence isolated client-rendered review prompts (e.g. React/Vue SPAs)
+		initSpaReviewSuppression();
+
 		// Only run hub page logic if on the Quiet Admin hub screen
 		if (typeof wpQuietAdminData !== 'undefined' && !wpQuietAdminData.isHubPage && $('.wp-quiet-admin-wrap').length === 0) {
 			return;
@@ -29,6 +32,40 @@
 		initBulkActions();
 		initWakeAll();
 	});
+
+	/**
+	 * Defensively hides isolated client-rendered review prompts (e.g. React/Vue SPAs)
+	 * that bypass PHP admin_notices output buffering, without altering page layouts.
+	 */
+	function initSpaReviewSuppression() {
+		var selectors = [
+			'.cff-review-notice',
+			'.cff_review_notice',
+			'.cff_review_notice_step_1',
+			'.sbi-review-notice',
+			'.sbi_review_notice',
+			'.sb-review-notice',
+			'.cff-notice-alert',
+			'#cff-admin-app .cff-review-notice',
+			'#sbi-admin-app .sbi-review-notice',
+			'#cff-admin-app .cff_review_notice',
+			'#sbi-admin-app .sbi_review_notice'
+		];
+
+		var selectorStr = selectors.join(',');
+
+		// Immediate hide
+		$(selectorStr).hide();
+
+		// If a modern SPA container exists, observe child additions to catch deferred renders
+		var appContainer = document.querySelector('#cff-admin-app, #sbi-admin-app, #sb-admin-app');
+		if (appContainer && window.MutationObserver) {
+			var observer = new MutationObserver(function () {
+				$(selectorStr, appContainer).hide();
+			});
+			observer.observe(appContainer, { childList: true, subtree: true });
+		}
+	}
 
 	var lastDismissedItem = null;
 	var undoToastTimer    = null;

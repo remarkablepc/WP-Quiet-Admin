@@ -1800,3 +1800,23 @@ button:disabled .dashicons-lock {
 	border-color: #003087 !important;
 }
 
+/* -------------------------------------------------------------
+ * 12. Targeted Client-Side In-App Review Prompt Suppression
+ * Silences isolated review nags rendered inside JavaScript SPAs (React/Vue)
+ * without touching or breaking page layout containers.
+ * ---------------------------------------------------------- */
+.cff-review-notice,
+.cff_review_notice,
+.cff_review_notice_step_1,
+.sbi-review-notice,
+.sbi_review_notice,
+.sb-review-notice,
+.cff-notice-alert,
+#cff-admin-app .cff-review-notice,
+#sbi-admin-app .sbi-review-notice,
+#cff-admin-app .cff_review_notice,
+#sbi-admin-app .sbi_review_notice,
+.cff-review-step {
+	display: none !important;
+}
+
