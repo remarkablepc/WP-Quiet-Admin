@@ -1,0 +1,1761 @@
+/**
+ * WP Quiet Admin Stylesheet
+ */
+
+/* -------------------------------------------------------------
+ * 1. Admin Bar Toolbar Integration
+ * ---------------------------------------------------------- */
+#wpadminbar .wp-quiet-admin-bar-root > .ab-item {
+	display: flex !important;
+	align-items: center !important;
+	height: 32px !important;
+	padding: 0 8px !important;
+}
+
+#wpadminbar .wp-quiet-admin-bar-root .ab-icon {
+	font-family: dashicons;
+	font-size: 18px;
+	margin-right: 4px;
+	vertical-align: middle;
+	line-height: 1;
+}
+
+#wpadminbar .wp-quiet-admin-bar-root.has-critical-alerts .ab-icon {
+	color: #ff4d4d !important;
+	animation: qa-pulse 2s infinite;
+}
+
+@keyframes qa-pulse {
+	0% { opacity: 1; }
+	50% { opacity: 0.4; }
+	100% { opacity: 1; }
+}
+
+.qa-bar-badges-group {
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 4px !important;
+	margin-left: 6px !important;
+	margin-right: 0 !important;
+	line-height: 1 !important;
+	vertical-align: middle !important;
+}
+
+.qa-pill {
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	font-size: 11px !important;
+	font-weight: 700 !important;
+	height: 18px !important;
+	line-height: 18px !important;
+	padding: 0 6px !important;
+	border-radius: 9px !important;
+	color: #ffffff !important;
+	text-decoration: none !important;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.qa-pill .qa-mini-dot {
+	font-size: 8px;
+	margin-right: 3px;
+	line-height: 1;
+}
+
+.qa-pill-high {
+	background-color: #d63638 !important;
+	animation: qa-pulse-pill 2s infinite;
+}
+
+@keyframes qa-pulse-pill {
+	0% { box-shadow: 0 0 0 0 rgba(214, 54, 56, 0.7); }
+	70% { box-shadow: 0 0 0 4px rgba(214, 54, 56, 0); }
+	100% { box-shadow: 0 0 0 0 rgba(214, 54, 56, 0); }
+}
+
+.qa-pill-medium {
+	background-color: #dba617 !important;
+	color: #1d2327 !important;
+}
+
+.qa-pill-low,
+.qa-pill-green {
+	background-color: #00a32a !important;
+	color: #ffffff !important;
+}
+
+.qa-pill-zero {
+	background-color: rgba(255, 255, 255, 0.2) !important;
+	color: #c3c4c7 !important;
+}
+
+.qa-sub-dot {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	margin-right: 6px;
+	vertical-align: middle;
+}
+
+.qa-dot-high { background-color: #d63638; }
+.qa-dot-medium { background-color: #dba617; }
+.qa-dot-low { background-color: #00a32a; }
+.qa-dot-other { background-color: #72aee6; }
+
+#wpadminbar #wp-admin-bar-wp-quiet-admin .dashicons,
+#wpadminbar .qa-sub-item-wrap .dashicons {
+	font-family: dashicons !important;
+	font-size: 16px !important;
+	width: 16px !important;
+	height: 16px !important;
+	line-height: 16px !important;
+	display: inline-block !important;
+	vertical-align: middle !important;
+	margin-right: 8px !important;
+	text-decoration: none !important;
+	speak: never;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.qa-sub-item-wrap {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+	width: 100% !important;
+	min-width: 215px !important;
+	box-sizing: border-box !important;
+}
+
+.qa-sub-left {
+	display: inline-flex !important;
+	align-items: center !important;
+	margin-right: 14px !important;
+	white-space: nowrap !important;
+}
+
+.qa-sub-count {
+	float: none !important;
+	margin-left: auto !important;
+	font-weight: 700 !important;
+	color: #ffffff !important;
+	background: rgba(255, 255, 255, 0.2) !important;
+	padding: 1px 7px !important;
+	border-radius: 9px !important;
+	font-size: 11px !important;
+	line-height: 14px !important;
+	display: inline-block !important;
+}
+
+/* -------------------------------------------------------------
+ * 2. Menu Badge Styling
+ * ---------------------------------------------------------- */
+.qa-menu-badge-critical {
+	background-color: #d63638 !important;
+	color: #fff !important;
+}
+
+/* -------------------------------------------------------------
+ * 3. Notice Hub Header & Wrap
+ * ---------------------------------------------------------- */
+.wp-quiet-admin-wrap {
+	margin-top: 20px;
+	max-width: 1200px;
+}
+
+.qa-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: #ffffff;
+	border: 1px solid #c3c4c7;
+	border-radius: 8px;
+	padding: 20px 24px;
+	margin-bottom: 20px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.qa-header h1 {
+	margin: 0 0 6px 0;
+	font-size: 24px;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: #1d2327;
+}
+
+.qa-header h1 .dashicons {
+	font-size: 28px;
+	width: 28px;
+	height: 28px;
+	color: #2271b1;
+}
+
+.qa-subtitle {
+	margin: 0;
+	color: #646970;
+	font-size: 14px;
+}
+
+.qa-header-right {
+	display: flex;
+	gap: 10px;
+}
+
+/* -------------------------------------------------------------
+ * 4. Nav Tabs & Priority Badges
+ * ---------------------------------------------------------- */
+.qa-nav-tabs {
+	border-bottom: 1px solid #c3c4c7;
+	margin-bottom: 20px;
+	display: flex;
+	gap: 4px;
+}
+
+.qa-nav-tabs .nav-tab {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-weight: 600;
+	padding: 9px 16px;
+	border-radius: 6px 6px 0 0;
+	font-size: 14px;
+	background: #f0f0f1;
+	border-color: #c3c4c7;
+	border-bottom: none;
+	color: #50575e;
+	transition: background 0.15s ease-in-out;
+}
+
+.qa-nav-tabs .nav-tab:hover {
+	background: #ffffff;
+	color: #1d2327;
+}
+
+.qa-nav-tabs .nav-tab-active {
+	background: #ffffff;
+	border-bottom-color: #ffffff;
+	color: #1d2327;
+}
+
+.qa-color-indicator {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	display: inline-block;
+}
+
+.dot-red { background-color: #d63638; }
+.dot-yellow { background-color: #dba617; }
+.dot-green { background-color: #00a32a; }
+.dot-other { background-color: #72aee6; }
+
+.qa-tab-badge {
+	background: #dcdcde;
+	color: #50575e;
+	padding: 2px 7px;
+	border-radius: 12px;
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 1;
+}
+
+.qa-tab-badge.badge-high.has-count {
+	background: #d63638;
+	color: #ffffff;
+}
+
+.qa-tab-badge.badge-medium.has-count {
+	background: #dba617;
+	color: #ffffff;
+}
+
+.qa-tab-badge.badge-low.has-count,
+.qa-tab-badge.badge-green.has-count,
+.qa-tab-badge.badge-muted.has-count {
+	background: #00a32a !important;
+	color: #ffffff !important;
+}
+
+.qa-tab-badge.badge-other.has-count {
+	background: #00a32a !important;
+	color: #ffffff !important;
+}
+
+.qa-tab-badge.badge-snoozed.has-count {
+	background: #8250df !important;
+	color: #ffffff !important;
+}
+
+.qa-tab-badge.badge-history.has-count {
+	background: #646970 !important;
+	color: #ffffff !important;
+}
+
+/* -------------------------------------------------------------
+ * 5. Tab Header Meta
+ * ---------------------------------------------------------- */
+.qa-tab-header-meta {
+	margin-bottom: 18px;
+}
+
+.qa-tab-header-meta h2 {
+	margin: 0 0 4px 0;
+	font-size: 18px;
+	font-weight: 600;
+}
+
+.qa-tab-header-meta .description {
+	margin: 0;
+	font-size: 13px;
+	color: #646970;
+}
+
+.qa-tab-header-flex {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.qa-btn-dismiss-tab {
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 5px !important;
+	font-weight: 500 !important;
+	transition: all 0.15s ease-in-out !important;
+}
+
+.qa-btn-dismiss-tab .dashicons {
+	font-size: 15px !important;
+	width: 15px !important;
+	height: 15px !important;
+	line-height: 15px !important;
+	color: #d63638 !important;
+	vertical-align: middle !important;
+	transition: color 0.15s ease-in-out !important;
+}
+
+.qa-btn-dismiss-tab:hover:not(:disabled) .dashicons {
+	color: #b32d2e !important;
+}
+
+/* Safety Reassurance Banner */
+.qa-safety-banner {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 14px 18px;
+	border-radius: 6px;
+	margin-bottom: 20px;
+	background: #f0f6fc;
+	border: 1px solid #c8d9ea;
+	border-left: 4px solid #2271b1;
+}
+
+.qa-safety-banner.is-active {
+	background: #f0f8f2;
+	border-color: #c3e6cb;
+	border-left-color: #00a32a;
+}
+
+.qa-safety-banner.is-active .qa-safety-icon .dashicons {
+	color: #00a32a;
+}
+
+.qa-safety-banner.is-inactive {
+	background: #fcf3f3;
+	border-color: #f5c6cb;
+	border-left-color: #d63638;
+}
+
+.qa-safety-banner.is-inactive .qa-safety-icon .dashicons {
+	color: #d63638;
+}
+
+.qa-safety-icon .dashicons {
+	font-size: 28px;
+	width: 28px;
+	height: 28px;
+}
+
+.qa-safety-text {
+	flex: 1;
+}
+
+.qa-safety-text strong {
+	display: block;
+	font-size: 14px;
+	margin-bottom: 2px;
+	color: #1d2327;
+}
+
+.qa-safety-text p {
+	margin: 0;
+	font-size: 13px;
+	color: #50575e;
+	line-height: 1.4;
+}
+
+/* -------------------------------------------------------------
+ * 6. Notice Cards & Grid
+ * ---------------------------------------------------------- */
+.qa-notices-grid {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.qa-notice-card {
+	background: #ffffff;
+	border: 1px solid #c3c4c7;
+	border-left-width: 5px;
+	border-radius: 6px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+	overflow: hidden;
+	transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.qa-notice-card.is-dismissing {
+	opacity: 0;
+	transform: translateY(-8px);
+}
+
+.qa-card-high { border-left-color: #d63638; }
+.qa-card-medium { border-left-color: #dba617; }
+.qa-card-low { border-left-color: #00a32a; }
+.qa-card-other { border-left-color: #72aee6; }
+.qa-card-muted { border-left-color: #00a32a !important; }
+
+.qa-card-meta {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: #f6f7f7;
+	padding: 10px 16px;
+	border-bottom: 1px solid #f0f0f1;
+	font-size: 12px;
+	color: #646970;
+}
+
+.qa-card-source {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+	color: #1d2327;
+}
+
+.qa-slug-pill {
+	background: #e0e0e0;
+	padding: 2px 6px;
+	border-radius: 4px;
+	font-size: 11px;
+}
+
+.qa-live-status-pill {
+	background: #e7f5ea;
+	color: #005a1e;
+	border: 1px solid #c2e4cb;
+	padding: 2px 7px;
+	border-radius: 4px;
+	font-size: 11px;
+	font-weight: 600;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	margin-left: 6px;
+}
+
+.qa-live-status-pill .dashicons {
+	font-size: 13px;
+	width: 13px;
+	height: 13px;
+}
+
+.qa-card-time {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.qa-card-body {
+	padding: 16px;
+}
+
+.qa-raw-notice-wrapper::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.qa-raw-notice-wrapper .notice,
+.qa-raw-notice-wrapper .update-nag,
+.qa-raw-notice-wrapper .updated,
+.qa-raw-notice-wrapper .error {
+	margin: 0 !important;
+	border: none !important;
+	box-shadow: none !important;
+	padding: 0 !important;
+	background: transparent !important;
+	display: block !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+}
+
+.qa-card-footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 16px;
+	background: #fbfbfb;
+	border-top: 1px solid #f0f0f1;
+}
+
+.qa-footer-left,
+.qa-footer-right {
+	display: flex;
+	gap: 8px;
+}
+
+.qa-btn-dismiss:hover {
+	color: #d63638 !important;
+	border-color: #d63638 !important;
+}
+
+/* -------------------------------------------------------------
+ * 7. Empty State
+ * ---------------------------------------------------------- */
+.qa-empty-state {
+	background: #ffffff;
+	border: 1px dashed #c3c4c7;
+	border-radius: 8px;
+	padding: 48px 24px;
+	text-align: center;
+	margin-top: 10px;
+}
+
+.qa-empty-icon .dashicons {
+	font-size: 48px;
+	width: 48px;
+	height: 48px;
+	color: #00a32a;
+	margin-bottom: 12px;
+}
+
+.qa-empty-state h3 {
+	margin: 0 0 8px 0;
+	font-size: 18px;
+	color: #1d2327;
+}
+
+.qa-empty-state p {
+	margin: 0;
+	color: #646970;
+	font-size: 14px;
+}
+
+/* -------------------------------------------------------------
+ * 8. Settings Section & Plugins Table
+ * ---------------------------------------------------------- */
+.qa-settings-form {
+	background: #ffffff;
+	border: 1px solid #c3c4c7;
+	border-radius: 8px;
+	padding: 24px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.qa-settings-section {
+	margin-bottom: 30px;
+	padding-bottom: 24px;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.qa-settings-section h3 {
+	font-size: 16px;
+	font-weight: 600;
+	margin-top: 0;
+	margin-bottom: 6px;
+	color: #1d2327;
+}
+
+.qa-plugins-table-wrapper {
+	margin-top: 14px;
+	max-height: 420px;
+	overflow-y: auto;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+}
+
+.qa-plugins-table th {
+	font-weight: 600;
+	background: #f6f7f7;
+}
+
+.qa-status-tag {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 4px;
+	font-size: 11px;
+	font-weight: 600;
+}
+
+.qa-status-active {
+	background: #d7eedb;
+	color: #005a1e;
+}
+
+.qa-status-inactive {
+	background: #f0f0f1;
+	color: #646970;
+}
+
+/* -------------------------------------------------------------
+ * 9. 3-State Segmented Control (Normal / Whitelist / Blacklist)
+ * ---------------------------------------------------------- */
+.qa-segmented-control {
+	display: inline-flex;
+	background: #e8e9eb;
+	border-radius: 6px;
+	padding: 2px;
+	gap: 2px;
+	border: 1px solid #c3c4c7;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.qa-segment {
+	display: inline-flex;
+	align-items: center;
+	padding: 5px 12px;
+	font-size: 12px;
+	font-weight: 600;
+	border-radius: 4px;
+	cursor: pointer;
+	color: #50575e;
+	user-select: none;
+	transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.qa-segment input[type="radio"] {
+	display: none !important;
+}
+
+.qa-segment:hover {
+	color: #1d2327;
+}
+
+.qa-segment.is-active.segment-normal {
+	background: #ffffff;
+	color: #1d2327;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.qa-segment.is-active.segment-whitelist {
+	background: #00a32a;
+	color: #ffffff;
+	box-shadow: 0 1px 3px rgba(0, 163, 42, 0.35);
+}
+
+.qa-segment.is-active.segment-blacklist {
+	background: #d63638;
+	color: #ffffff;
+	box-shadow: 0 1px 3px rgba(214, 54, 56, 0.35);
+}
+
+/* -------------------------------------------------------------
+ * 10. Left Sidebar Menu Multi-Pill Badges (#adminmenu)
+ * ---------------------------------------------------------- */
+#adminmenu a .qa-sidebar-badge-group,
+#adminmenu .wp-submenu a .qa-sidebar-badge-group {
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 4px !important;
+	float: none !important;
+	margin: 0 0 0 6px !important;
+	vertical-align: middle !important;
+}
+
+#adminmenu .qa-side-pill,
+#adminmenu .wp-submenu .qa-side-pill {
+	display: inline-block !important;
+	font-size: 11px !important;
+	font-weight: 600 !important;
+	line-height: 18px !important;
+	height: 18px !important;
+	min-width: 18px !important;
+	padding: 0 6px !important;
+	border-radius: 9px !important;
+	text-align: center !important;
+	color: #ffffff !important;
+	box-sizing: border-box !important;
+}
+
+#adminmenu .qa-side-pill.pill-red,
+#adminmenu .wp-submenu .qa-side-pill.pill-red {
+	background-color: #d63638 !important;
+	color: #ffffff !important;
+}
+
+#adminmenu .qa-side-pill.pill-yellow,
+#adminmenu .wp-submenu .qa-side-pill.pill-yellow {
+	background-color: #dba617 !important;
+	color: #1d2327 !important;
+}
+
+#adminmenu .qa-side-pill.pill-green,
+#adminmenu .wp-submenu .qa-side-pill.pill-green {
+	background-color: #00a32a !important;
+	color: #ffffff !important;
+}
+
+#adminmenu .qa-side-pill.pill-blue,
+#adminmenu .wp-submenu .qa-side-pill.pill-blue {
+	background-color: #2271b1 !important;
+	color: #ffffff !important;
+}
+
+/* -------------------------------------------------------------
+ * 11. WordPress Core Tab & Callout Banners
+ * ---------------------------------------------------------- */
+.qa-nav-tabs .qa-tab-wordpress .dashicons {
+	color: #2271b1;
+}
+
+.qa-nav-tabs .qa-tab-wordpress.nav-tab-active .dashicons {
+	color: #1d2327;
+}
+
+.qa-wp-critical-callout {
+	display: flex;
+	align-items: center;
+	background: #fcf0f1;
+	border: 1px solid #d63638;
+	border-left: 4px solid #d63638;
+	border-radius: 6px;
+	padding: 14px 18px;
+	margin-bottom: 22px;
+	gap: 14px;
+}
+
+.qa-wp-callout-icon {
+	color: #d63638;
+	display: flex;
+	align-items: center;
+}
+
+.qa-wp-callout-icon .dashicons {
+	font-size: 28px;
+	width: 28px;
+	height: 28px;
+}
+
+.qa-wp-callout-text {
+	flex: 1;
+}
+
+.qa-wp-callout-text strong {
+	display: block;
+	color: #8c1e20;
+	font-size: 14px;
+	margin-bottom: 2px;
+}
+
+.qa-wp-callout-text p {
+	margin: 0;
+	color: #50575e;
+	font-size: 13px;
+}
+
+/* -------------------------------------------------------------
+ * 12. WordPress Tab Sub-Filter Navigation
+ * ---------------------------------------------------------- */
+.qa-wp-subfilter-bar {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 20px;
+	flex-wrap: wrap;
+}
+
+.qa-wp-filter-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 14px;
+	background: #ffffff;
+	border: 1px solid #c3c4c7;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 600;
+	color: #50575e;
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.qa-wp-filter-btn:hover {
+	border-color: #2271b1;
+	color: #2271b1;
+	background: #f0f6fc;
+}
+
+.qa-wp-filter-btn.is-active {
+	background: #2271b1;
+	color: #ffffff;
+	border-color: #2271b1;
+}
+
+.qa-wp-filter-btn .qa-filter-count {
+	display: inline-block;
+	font-size: 10px;
+	padding: 1px 6px;
+	border-radius: 10px;
+	background: #e8e9eb;
+	color: #1d2327;
+}
+
+.qa-wp-filter-btn.is-active .qa-filter-count {
+	background: rgba(255, 255, 255, 0.3);
+	color: #ffffff;
+}
+
+.qa-wp-filter-btn .qa-filter-dot {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+}
+
+.qa-wp-filter-btn .dot-red { background: #d63638; }
+.qa-wp-filter-btn .dot-yellow { background: #dba617; }
+.qa-wp-filter-btn .dot-blue { background: #2271b1; }
+
+.qa-priority-pill {
+	display: inline-block;
+	font-size: 10px;
+	font-weight: 600;
+	padding: 1px 6px;
+	border-radius: 4px;
+	margin-left: 6px;
+	vertical-align: middle;
+}
+
+.qa-priority-pill.pill-red {
+	background: #fcf0f1;
+	color: #d63638;
+	border: 1px solid #d63638;
+}
+
+.qa-priority-pill.pill-yellow {
+	background: #fcf9e8;
+	color: #8c6d00;
+	border: 1px solid #dba617;
+}
+
+.qa-priority-pill.pill-green {
+	background: #edfaef;
+	color: #007017;
+	border: 1px solid #00a32a;
+}
+
+.qa-priority-pill.pill-green-soft {
+	background: #f0fdf4;
+	color: #166534;
+	border: 1px solid #86efac;
+}
+
+.qa-priority-pill.pill-blue {
+	background: #f0f6fc;
+	color: #2271b1;
+	border: 1px solid #2271b1;
+}
+
+/* -------------------------------------------------------------
+ * 13. Tab Navigation Multi-Pill Group (.qa-tab-pills-group)
+ * ---------------------------------------------------------- */
+.qa-tab-pills-group {
+	display: inline-flex;
+	align-items: center;
+	gap: 3px;
+	margin-left: 6px;
+	vertical-align: middle;
+}
+
+.qa-tab-pill {
+	display: inline-block;
+	font-size: 10px;
+	font-weight: 700;
+	line-height: 16px;
+	height: 16px;
+	min-width: 16px;
+	padding: 0 5px;
+	border-radius: 8px;
+	text-align: center;
+	color: #ffffff;
+	box-sizing: border-box;
+}
+
+.qa-tab-pill.pill-red { background-color: #d63638; }
+.qa-tab-pill.pill-yellow { background-color: #dba617; color: #1d2327; }
+.qa-tab-pill.pill-blue { background-color: #2271b1; }
+.qa-tab-pill.pill-green { background-color: #00a32a; }
+.qa-tab-pill.pill-zero { background-color: #c3c4c7; color: #ffffff; }
+
+.qa-tab-badge.badge-all {
+	background: #2271b1;
+	color: #ffffff;
+}
+
+.qa-tab-badge.badge-green,
+.qa-tab-badge.badge-muted {
+	background: #00a32a;
+	color: #ffffff;
+}
+
+.qa-tab-badge.badge-history {
+	background: #646970;
+	color: #ffffff;
+}
+
+/* -------------------------------------------------------------
+ * 14. Muted Notices Sub-Filter Bar
+ * ---------------------------------------------------------- */
+.qa-muted-subfilter-bar,
+.qa-all-subfilter-bar {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 20px;
+	flex-wrap: wrap;
+}
+
+.qa-muted-filter-btn,
+.qa-all-filter-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 14px;
+	background: #ffffff;
+	border: 1px solid #c3c4c7;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 600;
+	color: #50575e;
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.qa-muted-filter-btn:hover {
+	border-color: #00a32a;
+	color: #00a32a;
+	background: #f0fdf4;
+}
+
+.qa-muted-filter-btn.is-active {
+	background: #00a32a;
+	color: #ffffff;
+	border-color: #00a32a;
+}
+
+.qa-all-filter-btn:hover {
+	border-color: #2271b1;
+	color: #2271b1;
+	background: #f0f6fc;
+}
+
+.qa-all-filter-btn.is-active {
+	background: #2271b1;
+	color: #ffffff;
+	border-color: #2271b1;
+}
+
+.qa-muted-filter-btn .qa-filter-count,
+.qa-all-filter-btn .qa-filter-count {
+	display: inline-block;
+	font-size: 10px;
+	padding: 1px 6px;
+	border-radius: 10px;
+	background: #e8e9eb;
+	color: #1d2327;
+}
+
+.qa-muted-filter-btn.is-active .qa-filter-count,
+.qa-all-filter-btn.is-active .qa-filter-count {
+	background: rgba(255, 255, 255, 0.3);
+	color: #ffffff;
+}
+
+.qa-muted-filter-btn .qa-filter-dot,
+.qa-all-filter-btn .qa-filter-dot {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+}
+
+.qa-muted-filter-btn .dot-green,
+.qa-all-filter-btn .dot-green { background: #00a32a; }
+.qa-muted-filter-btn .dot-other { background: #72aee6; }
+
+/* -------------------------------------------------------------
+ * 15. Dismissed Archive Card & Undo Toast
+ * ---------------------------------------------------------- */
+.qa-archived-pill {
+	display: inline-block;
+	font-size: 10px;
+	font-weight: 600;
+	padding: 1px 6px;
+	border-radius: 4px;
+	margin-left: 6px;
+	background: #f0f0f1;
+	color: #646970;
+	border: 1px solid #dcdcde;
+}
+
+/* History / Archive Sub-filter Bar */
+.qa-history-subfilter-bar {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 20px;
+	flex-wrap: wrap;
+}
+
+.qa-history-filter-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 14px;
+	background: #ffffff;
+	border: 1px solid #c3c4c7;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 600;
+	color: #50575e;
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.qa-history-filter-btn:hover {
+	border-color: #646970;
+	color: #1d2327;
+	background: #f6f7f7;
+}
+
+.qa-history-filter-btn.is-active {
+	background: #2271b1;
+	color: #ffffff;
+	border-color: #2271b1;
+}
+
+.qa-history-filter-btn .qa-filter-count {
+	display: inline-block;
+	font-size: 10px;
+	padding: 1px 6px;
+	border-radius: 10px;
+	background: #e8e9eb;
+	color: #1d2327;
+}
+
+.qa-history-filter-btn.is-active .qa-filter-count {
+	background: rgba(255, 255, 255, 0.3);
+	color: #ffffff;
+}
+
+.qa-history-filter-btn .qa-filter-dot {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+}
+
+.qa-history-filter-btn .dot-red { background: #d63638; }
+.qa-history-filter-btn .dot-yellow { background: #dba617; }
+.qa-history-filter-btn .dot-green { background: #00a32a; }
+.qa-history-filter-btn .dot-blue { background: #2271b1; }
+
+.qa-notice-card.qa-card-archived {
+	opacity: 0.95;
+	border-left-style: dashed !important;
+	border-left-width: 4px !important;
+	border-left-color: #8c8f94;
+}
+
+.qa-notice-card.qa-card-archived.qa-card-high {
+	border-left-color: #d63638 !important;
+}
+
+.qa-notice-card.qa-card-archived.qa-card-medium {
+	border-left-color: #dba617 !important;
+}
+
+.qa-notice-card.qa-card-archived.qa-card-muted,
+.qa-notice-card.qa-card-archived.qa-card-low {
+	border-left-color: #00a32a !important;
+}
+
+.qa-notice-card.qa-card-archived.qa-card-wordpress,
+.qa-notice-card.qa-card-archived.qa-card-core {
+	border-left-color: #2271b1 !important;
+}
+
+.qa-notice-card.qa-card-archived.qa-card-other {
+	border-left-color: #72aee6 !important;
+}
+
+.qa-undo-toast {
+	position: fixed;
+	bottom: 24px;
+	right: 24px;
+	background: #1d2327;
+	color: #ffffff;
+	padding: 12px 18px;
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+	z-index: 999999;
+	font-size: 13px;
+	animation: qa-toast-in 0.25s ease-out forwards;
+}
+
+@keyframes qa-toast-in {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.qa-undo-toast-btn {
+	background: #2271b1;
+	color: #ffffff;
+	border: none;
+	border-radius: 4px;
+	padding: 5px 12px;
+	font-size: 12px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.15s ease;
+}
+
+.qa-undo-toast-btn:hover {
+	background: #135e96;
+}
+
+.qa-undo-toast-hint {
+	font-size: 11px;
+	color: #8c8f94;
+	font-family: monospace;
+	background: rgba(255, 255, 255, 0.1);
+	padding: 2px 5px;
+	border-radius: 3px;
+}
+
+.qa-undo-toast-close {
+	background: transparent;
+	border: none;
+	color: #8c8f94;
+	cursor: pointer;
+	font-size: 16px;
+	line-height: 1;
+	padding: 0 4px;
+}
+
+.qa-undo-toast-close:hover {
+	color: #ffffff;
+}
+
+/* -------------------------------------------------------------
+ * 16. Snooze Dropdown & Custom Date Picker
+ * ---------------------------------------------------------- */
+.qa-snooze-wrap {
+	position: relative;
+	display: inline-block;
+}
+
+.qa-btn-snooze-toggle {
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 4px !important;
+}
+
+.qa-btn-snooze-toggle .qa-snooze-caret {
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+	margin-top: 1px;
+}
+
+.qa-snooze-dropdown {
+	display: none;
+	position: absolute;
+	right: 0;
+	bottom: calc(100% + 6px);
+	background: #ffffff;
+	border: 1px solid #c3c4c7;
+	border-radius: 6px;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+	min-width: 200px;
+	z-index: 9999;
+	padding: 6px 0;
+}
+
+.qa-snooze-wrap.is-open .qa-snooze-dropdown {
+	display: block;
+	animation: qa-snooze-pop 0.15s ease-out;
+}
+
+@keyframes qa-snooze-pop {
+	from { opacity: 0; transform: translateY(4px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+.qa-snooze-item {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 7px 14px;
+	color: #1d2327;
+	text-decoration: none;
+	font-size: 12px;
+	font-weight: 500;
+	transition: background 0.12s ease;
+}
+
+.qa-snooze-item:hover {
+	background: #f0f6fc;
+	color: #2271b1;
+}
+
+.qa-snooze-item .dashicons {
+	font-size: 15px;
+	width: 15px;
+	height: 15px;
+	color: #646970;
+}
+
+.qa-snooze-divider {
+	height: 1px;
+	background: #e8e9eb;
+	margin: 5px 0;
+}
+
+.qa-snooze-custom-panel {
+	padding: 6px 14px 4px;
+}
+
+.qa-snooze-custom-label {
+	display: block;
+	font-size: 11px;
+	font-weight: 600;
+	color: #646970;
+	margin-bottom: 5px;
+}
+
+.qa-snooze-custom-row {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+}
+
+.qa-snooze-date-picker {
+	width: 120px !important;
+	font-size: 11px !important;
+	padding: 2px 6px !important;
+	height: 26px !important;
+	border: 1px solid #8c8f94 !important;
+	border-radius: 4px !important;
+}
+
+.qa-btn-snooze-custom {
+	height: 26px !important;
+	line-height: 24px !important;
+	padding: 0 8px !important;
+	font-size: 11px !important;
+}
+
+/* -------------------------------------------------------------
+ * 17. Archive Sub-Filters & Snoozed Notice Card
+ * ---------------------------------------------------------- */
+.qa-history-subfilter-bar {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 20px;
+	flex-wrap: wrap;
+}
+
+.qa-history-filter-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 14px;
+	background: #ffffff;
+	border: 1px solid #c3c4c7;
+	border-radius: 20px;
+	font-size: 12px;
+	font-weight: 600;
+	color: #50575e;
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.qa-history-filter-btn:hover {
+	border-color: #2271b1;
+	color: #2271b1;
+	background: #f0f6fc;
+}
+
+.qa-history-filter-btn.is-active {
+	background: #2271b1;
+	color: #ffffff;
+	border-color: #2271b1;
+}
+
+.qa-history-filter-btn .qa-filter-count {
+	display: inline-block;
+	font-size: 10px;
+	padding: 1px 6px;
+	border-radius: 10px;
+	background: #e8e9eb;
+	color: #1d2327;
+}
+
+.qa-history-filter-btn.is-active .qa-filter-count {
+	background: rgba(255, 255, 255, 0.3);
+	color: #ffffff;
+}
+
+.qa-archive-card-snoozed {
+	border-left: 4px solid #dba617 !important;
+	background: #fffdf5 !important;
+}
+
+.qa-snoozed-pill {
+	background: #fef3c7;
+	color: #92400e;
+	border: 1px solid #fde68a;
+	padding: 2px 7px;
+	border-radius: 4px;
+	font-size: 11px;
+	font-weight: 600;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	margin-left: 6px;
+}
+
+.qa-btn-whitelist.is-active {
+	background: #f0fdf4 !important;
+	border-color: #00a32a !important;
+	color: #007017 !important;
+	font-weight: 600 !important;
+}
+
+/* -------------------------------------------------------------
+ * 15. Checkboxes & Contextual Floating Bulk Actions Bar
+ * ---------------------------------------------------------- */
+.qa-card-select-label {
+	display: inline-flex;
+	align-items: center;
+	margin-right: 12px;
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+.qa-card-select-checkbox {
+	width: 17px !important;
+	height: 17px !important;
+	margin: 0 !important;
+	border-radius: 4px !important;
+	cursor: pointer !important;
+	border: 1px solid #8c8f94 !important;
+	transition: all 0.15s ease-in-out !important;
+}
+
+.qa-card-select-checkbox:checked {
+	background-color: #2271b1 !important;
+	border-color: #2271b1 !important;
+}
+
+.qa-notice-card.is-selected {
+	border-color: #2271b1 !important;
+	box-shadow: 0 0 0 1px #2271b1, 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+	background: #f8fafc !important;
+}
+
+/* Floating Contextual Bulk Bar */
+.qa-bulk-actions-bar {
+	position: sticky;
+	top: 32px;
+	z-index: 100;
+	background: #1d2327;
+	color: #ffffff;
+	border-radius: 8px;
+	padding: 10px 18px;
+	margin-bottom: 20px;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+	animation: qaSlideInDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes qaSlideInDown {
+	from {
+		opacity: 0;
+		transform: translateY(-8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.qa-bulk-bar-inner {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.qa-bulk-bar-left {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+.qa-bulk-select-all-label {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	cursor: pointer;
+	font-size: 13px;
+	color: #ffffff;
+	font-weight: 500;
+}
+
+.qa-bulk-select-all-checkbox {
+	width: 17px !important;
+	height: 17px !important;
+	margin: 0 !important;
+	border-radius: 4px !important;
+	cursor: pointer !important;
+}
+
+.qa-bulk-selected-text strong {
+	color: #72aee6;
+	font-weight: 700;
+}
+
+.qa-bulk-deselect-btn {
+	color: #a7aaad !important;
+	font-size: 12px !important;
+	text-decoration: underline !important;
+	cursor: pointer !important;
+	padding: 0 !important;
+	background: none !important;
+	border: none !important;
+}
+
+.qa-bulk-deselect-btn:hover {
+	color: #ffffff !important;
+}
+
+.qa-bulk-bar-right {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.qa-bulk-bar-right .button {
+	height: 32px !important;
+	line-height: 30px !important;
+	font-size: 13px !important;
+	padding: 0 12px !important;
+}
+
+.qa-bulk-snooze-wrap .qa-snooze-dropdown {
+	top: calc(100% + 6px) !important;
+	right: 0 !important;
+	left: auto !important;
+	min-width: 200px !important;
+	background: #ffffff !important;
+	color: #1d2327 !important;
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25) !important;
+	border-radius: 6px !important;
+}
+
+.qa-card-snoozed {
+	border-left: 4px solid #8250df !important;
+}
+
+/* -------------------------------------------------------------
+ * 12. User Action Audit Trail & Portability Styles
+ * ---------------------------------------------------------- */
+.qa-audit-header-flex {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-bottom: 16px;
+}
+
+.qa-audit-header-flex h3 {
+	margin: 0 0 4px 0 !important;
+}
+
+.qa-audit-header-flex .description {
+	margin: 0 !important;
+}
+
+.qa-audit-table-wrapper {
+	background: #ffffff;
+	border: 1px solid #c3c4c7;
+	border-radius: 6px;
+	overflow: hidden;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.qa-audit-table {
+	margin: 0 !important;
+	border: none !important;
+}
+
+.qa-audit-table th {
+	font-weight: 600 !important;
+	background: #f6f7f7 !important;
+	color: #1d2327 !important;
+}
+
+.qa-audit-table td {
+	vertical-align: middle !important;
+	padding: 10px 12px !important;
+}
+
+.qa-audit-ago {
+	font-size: 11px;
+	color: #646970;
+	margin-top: 2px;
+}
+
+.qa-audit-user {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.qa-audit-user img {
+	border-radius: 50%;
+	width: 22px;
+	height: 22px;
+}
+
+.qa-audit-username {
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.qa-audit-login {
+	font-size: 11px;
+	background: #f0f0f1;
+	padding: 1px 4px;
+	border-radius: 3px;
+	color: #50575e;
+}
+
+.qa-audit-badge {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 10px;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 16px;
+	text-transform: capitalize;
+}
+
+.qa-audit-badge.badge-dismiss {
+	background-color: #fee2e2;
+	color: #991b1b;
+	border: 1px solid #fecaca;
+}
+
+.qa-audit-badge.badge-snooze {
+	background-color: #f5f3ff;
+	color: #6b21a8;
+	border: 1px solid #ddd6fe;
+}
+
+.qa-audit-badge.badge-wake {
+	background-color: #dcfce7;
+	color: #166534;
+	border: 1px solid #bbf7d0;
+}
+
+.qa-audit-badge.badge-purge {
+	background-color: #fef2f2;
+	color: #b91c1c;
+	border: 1px solid #fca5a5;
+}
+
+.qa-audit-badge.badge-info {
+	background-color: #e0f2fe;
+	color: #0369a1;
+	border: 1px solid #bae6fd;
+}
+
+.qa-audit-summary-text {
+	color: #2c3338;
+	font-size: 13px;
+}
+
+.qa-audit-empty {
+	padding: 36px 20px;
+	text-align: center;
+	color: #646970;
+}
+
+.qa-audit-empty .dashicons {
+	font-size: 32px;
+	width: 32px;
+	height: 32px;
+	margin-bottom: 8px;
+	color: #8c8f94;
+}
+
+.qa-audit-empty p {
+	font-size: 13px;
+	margin: 0;
+}
+
+.qa-portability-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+	gap: 20px;
+	margin-top: 16px;
+}
+
+.qa-portability-box {
+	background: #ffffff;
+	border: 1px solid #c3c4c7;
+	border-radius: 6px;
+	padding: 20px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.qa-portability-box h4 {
+	margin: 0 0 8px 0;
+	font-size: 15px;
+	font-weight: 600;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	color: #1d2327;
+}
+
+.qa-portability-box h4 .dashicons {
+	color: #2271b1;
+}
+
+.qa-portability-box p {
+	color: #50575e;
+	font-size: 13px;
+	line-height: 1.5;
+	margin: 0 0 16px 0;
+}
+
+.qa-import-file-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.qa-import-file-row input[type="file"] {
+	max-width: 250px;
+	font-size: 12px;
+}
+
+button:disabled .dashicons-lock {
+	color: #a7aaad;
+}
+
+/* -------------------------------------------------------------
+ * 12. Support & Sponsorship Section
+ * ---------------------------------------------------------- */
+.qa-support-card {
+	background: #ffffff;
+	border: 1px solid #c3c4c7;
+	border-radius: 8px;
+	padding: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+	flex-wrap: wrap;
+}
+
+.qa-support-card-left {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+	flex: 1 1 500px;
+}
+
+.qa-support-icon .dashicons {
+	font-size: 32px;
+	width: 32px;
+	height: 32px;
+	color: #d63638;
+}
+
+.qa-support-text h3 {
+	margin: 0 0 6px 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.qa-support-text p {
+	margin: 0;
+	color: #50575e;
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.qa-support-actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.qa-btn-sponsor {
+	background: #ffffff !important;
+	border-color: #dcdcde !important;
+	color: #2c3338 !important;
+	font-weight: 600 !important;
+	padding: 4px 14px !important;
+}
+
+.qa-btn-sponsor:hover {
+	border-color: #ea4aaa !important;
+	color: #ea4aaa !important;
+}
+
+.qa-btn-paypal {
+	background: #0070ba !important;
+	border-color: #0070ba !important;
+	font-weight: 600 !important;
+	padding: 4px 14px !important;
+}
+
+.qa-btn-paypal:hover {
+	background: #003087 !important;
+	border-color: #003087 !important;
+}
+
