@@ -1567,14 +1567,14 @@ class WP_Quiet_Admin_Admin_Page {
 						<span class="dashicons dashicons-money-alt" style="vertical-align: middle; margin-right: 4px;"></span>
 						<?php esc_html_e( 'Donate via PayPal / Venmo', 'wp-quiet-admin' ); ?>
 					</a>
-					<a href="https://github.com/remarkablepc/WP-Quiet-Admin/discussions" target="_blank" rel="noopener noreferrer" class="button qa-btn-discuss" title="<?php esc_attr_e( 'Join community discussions on GitHub (Free passion project - no 1-on-1 support)', 'wp-quiet-admin' ); ?>">
+					<a href="https://github.com/remarkablepc/WP-Quiet-Admin/discussions" target="_blank" rel="noopener noreferrer" class="button qa-btn-discuss" title="<?php esc_attr_e( 'Join community discussions on GitHub (Free open-source software - no 1-on-1 support)', 'wp-quiet-admin' ); ?>">
 						<span class="dashicons dashicons-format-chat" style="vertical-align: middle; margin-right: 4px;"></span>
 						<?php esc_html_e( 'Community Discussions', 'wp-quiet-admin' ); ?>
 					</a>
 				</div>
 			</div>
 			<p class="description" style="margin-top: 10px; font-style: italic; font-size: 12px; color: #646970;">
-				<?php esc_html_e( 'Note: WP Quiet Admin is a free open-source passion project provided as-is without individual, 1-on-1 technical support. Feel free to connect with fellow users and share ideas in GitHub Discussions!', 'wp-quiet-admin' ); ?>
+				<?php esc_html_e( 'Note: WP Quiet Admin is free open-source software provided as-is without individual, 1-on-1 technical support. Feel free to connect with fellow users and share ideas in GitHub Discussions!', 'wp-quiet-admin' ); ?>
 			</p>
 		</div>
 		<?php

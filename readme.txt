@@ -82,7 +82,7 @@ When you dismiss or snooze a notice (or batch of notices), an interactive toast 
 Yes. WP Quiet Admin is free and open-source software by RemarkablePC / David Hewitt licensed under the GNU General Public License version 2 or later.
 
 = Where can I get help or discuss WP Quiet Admin? =
-Peer-to-peer discussions, questions, and feature ideas are hosted on our GitHub Discussions forum at https://github.com/remarkablepc/WP-Quiet-Admin/discussions. Please note that WP Quiet Admin is an independent, free open-source passion project provided as-is without individual, one-on-one technical support. Community members are warmly encouraged to collaborate and help one another in the discussion forums.
+Peer-to-peer discussions, questions, and feature ideas are hosted on our GitHub Discussions forum at https://github.com/remarkablepc/WP-Quiet-Admin/discussions. Please note that WP Quiet Admin is independent, free open-source software provided as-is without individual, one-on-one technical support. Community members are warmly encouraged to collaborate and help one another in the discussion forums.
 
 == Screenshots ==
 

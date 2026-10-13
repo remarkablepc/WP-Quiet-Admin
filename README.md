@@ -120,7 +120,7 @@ WP Quiet Admin is engineered as a safe, respectful traffic controller for the Wo
 
 Have feedback, questions, or ideas to share with fellow WordPress administrators and site owners? You are warmly invited to join the peer-to-peer conversation on **[GitHub Discussions](https://github.com/remarkablepc/WP-Quiet-Admin/discussions)**.
 
-*(Note: WP Quiet Admin is an independent, free open-source passion project provided as-is without individual, one-on-one technical support. Community members are encouraged to help one another in the discussion forums).*
+*(Note: WP Quiet Admin is independent, free and open-source software provided as-is without individual, one-on-one technical support. Community members are encouraged to help one another in the discussion forums).*
 
 ---
 

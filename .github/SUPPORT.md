@@ -2,9 +2,9 @@
 
 Thank you for using **WP Quiet Admin**!
 
-## Passion Project Notice & Support Boundary
+## Open Source Notice & Support Boundary
 
-WP Quiet Admin is an independent, free open-source passion project created and maintained by **David @ RemarkablePC**. 
+WP Quiet Admin is independent, free open-source software created and maintained by **David @ RemarkablePC**. 
 
 Because this tool is provided 100% free of charge and maintained during personal time:
 
