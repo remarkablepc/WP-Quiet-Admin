@@ -1800,6 +1800,18 @@ button:disabled .dashicons-lock {
 	border-color: #003087 !important;
 }
 
+.qa-btn-discuss {
+	border-color: #dcdcde !important;
+	color: #2c3338 !important;
+	font-weight: 600 !important;
+	padding: 4px 14px !important;
+}
+
+.qa-btn-discuss:hover {
+	border-color: #2271b1 !important;
+	color: #2271b1 !important;
+}
+
 /* -------------------------------------------------------------
  * 12. Targeted Client-Side In-App Review Prompt Suppression
  * Silences isolated review nags rendered inside JavaScript SPAs (React/Vue)
