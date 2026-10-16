@@ -4,7 +4,7 @@ Tags: admin notices, quiet admin, notice manager, snooze notices, clean admin, d
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.11
+Stable tag: 1.0.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,6 +95,9 @@ Peer-to-peer discussions, questions, and feature ideas are hosted on our GitHub 
 7. Dedicated Rules & Settings panel for Show in Admin, Mute Everywhere, and pass-through configuration.
 
 == Changelog ==
+
+= 1.0.12 =
+* Fix: Resolved a fatal parse error (unclosed brace) in the notice classifier that prevented activation on some sites.
 
 = 1.0.11 =
 * Fix: Prevented notice icon collisions where plugins using pseudo-element icons (such as LiteSpeed Cache's lightning bolt badge) overlapped notice body text.
