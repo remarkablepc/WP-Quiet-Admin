@@ -285,14 +285,14 @@ class WP_Quiet_Admin_Notice_Manager {
 	public function detect_plugin_source( $html, $installed_plugins ) {
 		$lower_html = strtolower( $html );
 
-		// Check if it's WordPress Core
-		if ( false !== strpos( $lower_html, 'update-core.php' ) || 
-		     false !== strpos( $lower_html, 'update-nag' ) ||
+		// Check if it's WordPress Core (definitive markers only; loose guesses run last).
+		if ( false !== strpos( $lower_html, 'update-core.php' ) ||
 		     false !== strpos( $lower_html, 'new version of wordpress' ) ||
-		     false !== strpos( $lower_html, 'wordpress version' ) ||
 		     false !== strpos( $lower_html, 'welcome to wordpress' ) ||
-		     false !== strpos( $lower_html, 'site-health' ) ||
-		     ( false !== strpos( $lower_html, 'wordpress' ) && ( false !== strpos( $lower_html, 'update' ) || false !== strpos( $lower_html, 'security' ) || false !== strpos( $lower_html, 'database update' ) ) ) ) {
+		     false !== strpos( $lower_html, 'site-health.php' ) ||
+		     false !== strpos( $lower_html, 'wp-admin/upgrade.php' ) ||
+		     false !== strpos( $lower_html, 'wordpress database update' ) ||
+		     preg_match( '/wordpress\s+[\d.]+\s+is\s+available/', $lower_html ) ) {
 			return array(
 				'slug'    => 'wordpress-core',
 				'name'    => 'WordPress Core',
@@ -327,6 +327,9 @@ class WP_Quiet_Admin_Notice_Manager {
 			'use-any-font'                 => array( 'use-any-font', 'uaf_' ),
 			'just-duplicate-post'          => array( 'just-duplicate' ),
 			'robo-gallery'                 => array( 'robo-gallery', 'rsg_gallery' ),
+			'restore-paypal-standard-for-woocommerce' => array( 'rpsfw', 'restore-paypal-standard' ),
+			'supreme-modules-for-divi'     => array( 'supreme-modules-for-divi', 'divi supreme', 'dsm-admin' ),
+			'related-products-manager-woocommerce' => array( 'related-products-manager', 'prowc' ),
 		);
 
 		// Check known signatures against installed plugins
@@ -345,7 +348,7 @@ class WP_Quiet_Admin_Notice_Manager {
 		}
 
 		// General check: exact slug, underscore version, base stem, or name matches
-		$stop_words = array( 'wordpress', 'plugin', 'plugins', 'custom', 'simple', 'advanced', 'ultimate', 'easy', 'smart', 'super', 'online', 'official', 'settings', 'manager', 'addons', 'addon', 'tools', 'tool', 'feed', 'feeds', 'forms', 'form', 'mail', 'page', 'site', 'core', 'free', 'lite', 'best' );
+		$stop_words = array( 'wordpress', 'woocommerce', 'products', 'payments', 'subscriptions', 'plugin', 'plugins', 'custom', 'simple', 'advanced', 'ultimate', 'easy', 'smart', 'super', 'online', 'official', 'settings', 'manager', 'addons', 'addon', 'tools', 'tool', 'feed', 'feeds', 'forms', 'form', 'mail', 'page', 'site', 'core', 'free', 'lite', 'best' );
 
 		foreach ( $installed_plugins as $slug => $data ) {
 			$clean_slug      = strtolower( $slug );
@@ -395,6 +398,15 @@ class WP_Quiet_Admin_Notice_Manager {
 			}
 		}
 
+		// Last resort: loose core heuristic, only when no installed plugin could be matched.
+		if ( false !== strpos( $lower_html, 'wordpress' ) && ( false !== strpos( $lower_html, 'update' ) || false !== strpos( $lower_html, 'security' ) ) ) {
+			return array(
+				'slug'    => 'wordpress-core',
+				'name'    => 'WordPress Core',
+				'is_core' => true,
+			);
+		}
+
 		return array(
 			'slug'    => '',
 			'name'    => __( 'Unknown Plugin / System', 'wp-quiet-admin' ),
@@ -426,13 +438,15 @@ class WP_Quiet_Admin_Notice_Manager {
 				$cleaned = true;
 			}
 
-			// Dynamically resolve existing notices that were previously marked Unknown Plugin / System
-			if ( ( empty( $notice['source_slug'] ) || ( isset( $notice['source_name'] ) && 'Unknown Plugin / System' === $notice['source_name'] ) ) && ! empty( $notice['html'] ) ) {
+			// Dynamically resolve notices that were previously marked Unknown Plugin / System, or mislabeled as WordPress Core
+			$was_unknown = empty( $notice['source_slug'] ) || ( isset( $notice['source_name'] ) && 'Unknown Plugin / System' === $notice['source_name'] );
+			$was_core    = isset( $notice['source_slug'] ) && 'wordpress-core' === $notice['source_slug'];
+			if ( ( $was_unknown || $was_core ) && ! empty( $notice['html'] ) ) {
 				if ( null === $installed ) {
 					$installed = $this->settings->get_installed_plugins();
 				}
 				$resolved = $this->detect_plugin_source( $notice['html'], $installed );
-				if ( ! empty( $resolved['slug'] ) ) {
+				if ( ! empty( $resolved['slug'] ) && $resolved['slug'] !== ( $notice['source_slug'] ?? '' ) ) {
 					$notices[ $id ]['source_slug'] = $resolved['slug'];
 					$notices[ $id ]['source_name'] = $resolved['name'];
 					$notices[ $id ]['is_core']     = $resolved['is_core'];

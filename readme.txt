@@ -4,7 +4,7 @@ Tags: admin notices, quiet admin, notice manager, snooze notices, clean admin, d
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.12
+Stable tag: 1.0.13
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,7 +96,7 @@ Peer-to-peer discussions, questions, and feature ideas are hosted on our GitHub 
 
 == Changelog ==
 
-= 1.0.12 =
+= 1.0.13 =
 * Fix: Resolved a fatal parse error (unclosed brace) in the notice classifier that prevented activation on some sites.
 
 = 1.0.11 =
