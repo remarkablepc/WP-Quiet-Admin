@@ -200,10 +200,12 @@ class WP_Quiet_Admin_Notice_Manager {
 				$stored_notices[ $notice_id ] = $notice_data;
 			}
 
+			$is_dismissed = ! empty( $stored_notices[ $notice_id ]['dismissed'] );
+
 			// Determine if this notice should pass through to the screen
 			$should_passthrough = false;
 
-			if ( ! $is_hub_page && ! $is_snoozed ) {
+			if ( ! $is_hub_page && ! $is_snoozed && ! $is_dismissed ) {
 				// 1. Live pass-through plugin?
 				if ( ! empty( $source['slug'] ) && $this->settings->is_whitelisted( $source['slug'] ) ) {
 					$should_passthrough = true;

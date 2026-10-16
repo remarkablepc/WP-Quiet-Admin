@@ -3,7 +3,7 @@
  * Plugin Name:       WP Quiet Admin
  * Plugin URI:        https://wordpress.org/plugins/wp-quiet-admin/
  * Description:       Intelligently silences noisy admin notices and groups them by priority into a clean, dedicated notification hub with snooze and pass-through controls.
- * Version:           1.0.17
+ * Version:           1.0.18
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            RemarkablePC
@@ -29,7 +29,7 @@ if ( defined( 'WP_QUIET_ADMIN_VERSION' ) || class_exists( 'WP_Quiet_Admin', fals
 }
 
 // Define Plugin Constants
-defined( 'WP_QUIET_ADMIN_VERSION' ) || define( 'WP_QUIET_ADMIN_VERSION', '1.0.17' );
+defined( 'WP_QUIET_ADMIN_VERSION' ) || define( 'WP_QUIET_ADMIN_VERSION', '1.0.18' );
 defined( 'WP_QUIET_ADMIN_FILE' ) || define( 'WP_QUIET_ADMIN_FILE', __FILE__ );
 defined( 'WP_QUIET_ADMIN_DIR' ) || define( 'WP_QUIET_ADMIN_DIR', plugin_dir_path( __FILE__ ) );
 defined( 'WP_QUIET_ADMIN_URL' ) || define( 'WP_QUIET_ADMIN_URL', plugin_dir_url( __FILE__ ) );
