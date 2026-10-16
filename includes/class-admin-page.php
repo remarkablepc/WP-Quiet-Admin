@@ -197,6 +197,7 @@ class WP_Quiet_Admin_Admin_Page {
 		if ( 'all' === $save_section || 'general' === $save_section ) {
 			$new_settings['passthrough_high']           = ! empty( $_POST['passthrough_high'] );
 			$new_settings['passthrough_core']           = ! empty( $_POST['passthrough_core'] );
+			$new_settings['passthrough_sync_dismiss']   = ! empty( $_POST['passthrough_sync_dismiss'] );
 			$new_settings['show_admin_bar']             = ! empty( $_POST['show_admin_bar'] );
 			$new_settings['retention_days']             = isset( $_POST['retention_days'] ) ? absint( $_POST['retention_days'] ) : 7;
 			$new_settings['audit_retention_days']       = isset( $_POST['audit_retention_days'] ) ? absint( $_POST['audit_retention_days'] ) : 30;
@@ -1334,6 +1335,18 @@ class WP_Quiet_Admin_Admin_Page {
 								</label>
 								<p class="description">
 									<?php esc_html_e( 'Allow official WordPress update notifications and update nags to appear normally on standard pages.', 'wp-quiet-admin' ); ?>
+								</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><?php esc_html_e( 'Sync Pass-Through Dismissals', 'wp-quiet-admin' ); ?></th>
+							<td>
+								<label>
+									<input type="checkbox" name="passthrough_sync_dismiss" value="1" <?php checked( ! empty( $settings['passthrough_sync_dismiss'] ) ); ?> />
+									<strong><?php esc_html_e( 'Dismiss from Quiet Admin Hub when closed on admin pages', 'wp-quiet-admin' ); ?></strong>
+								</label>
+								<p class="description">
+									<?php esc_html_e( 'When you close an allowed pass-through notice (such as a WordPress Core update, Critical alert, or whitelisted plugin banner) using its (X) button on a standard admin screen, automatically mark it as dismissed in Quiet Admin and move it to your History archive.', 'wp-quiet-admin' ); ?>
 								</p>
 							</td>
 						</tr>

@@ -219,7 +219,14 @@ class WP_Quiet_Admin_Notice_Manager {
 			}
 
 			if ( $should_passthrough ) {
-				$passthrough_html .= $html;
+				// Embed notice ID attribute on the outer element for seamless dismissal synchronization
+				$tagged_html = preg_replace(
+					'/^(\s*<[a-z0-9\-]+)([\s>])/i',
+					'$1 data-qa-notice-id="' . esc_attr( $notice_id ) . '"$2',
+					$html,
+					1
+				);
+				$passthrough_html .= ( null !== $tagged_html ) ? $tagged_html : $html;
 			}
 		}
 

@@ -8,6 +8,9 @@
 		// 1. Defensively silence isolated client-rendered review prompts (e.g. React/Vue SPAs)
 		initSpaReviewSuppression();
 
+		// 2. Synchronize dismissals from passed-through notices across standard admin screens
+		initPassthroughDismissalSync();
+
 		// Only run hub page logic if on the Quiet Admin hub screen
 		if (typeof wpQuietAdminData !== 'undefined' && !wpQuietAdminData.isHubPage && $('.wp-quiet-admin-wrap').length === 0) {
 			return;
@@ -1166,6 +1169,43 @@
 
 		$(document.body).on('change input', '.formula-section-card input, .formula-section-card select', function () {
 			setTimeout(updateDynamicSummaries, 30);
+		});
+	}
+
+	/**
+	 * Synchronize dismissals when a user closes a passed-through notice on regular admin screens.
+	 * When the user clicks the notice's (X) close button, sends a background AJAX request
+	 * to mark the notice dismissed in WP Quiet Admin and archive it.
+	 */
+	function initPassthroughDismissalSync() {
+		if (typeof wpQuietAdminData === 'undefined' || !wpQuietAdminData.syncDismissals) {
+			return;
+		}
+
+		// Listen for WordPress native close button clicks and plugin custom dismiss buttons
+		$(document).on('click', '.notice-dismiss, [data-dismiss="notice"], button.close, .is-dismissible .notice-dismiss', function () {
+			var $btn = $(this);
+			var $notice = $btn.closest('[data-qa-notice-id]');
+			if (!$notice.length) {
+				return;
+			}
+
+			var noticeId = $notice.attr('data-qa-notice-id');
+			if (!noticeId) {
+				return;
+			}
+
+			// Fire non-blocking background dismissal to Quiet Admin
+			$.ajax({
+				url: wpQuietAdminData.ajaxUrl,
+				type: 'POST',
+				data: {
+					action: 'wp_quiet_admin_dismiss_notice',
+					nonce: wpQuietAdminData.nonce,
+					notice_id: noticeId
+				},
+				timeout: 5000
+			});
 		});
 	}
 })(jQuery);

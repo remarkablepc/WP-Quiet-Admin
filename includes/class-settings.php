@@ -39,6 +39,7 @@ class WP_Quiet_Admin_Settings {
 		return array(
 			'passthrough_high'            => true,  // Allow Red (High Priority) notices to appear directly on admin pages
 			'passthrough_core'            => true,  // Allow WordPress Core update nags to appear directly
+			'passthrough_sync_dismiss'    => true,  // When a passed-through notice is dismissed on a normal WP page, dismiss from Quiet Admin tab
 			'show_admin_bar'              => true,  // Show quiet count badge in top WP Admin Bar
 			'whitelisted_plugins'         => array(), // Plugins whose notices are always allowed on regular pages
 			'blacklisted_plugins'         => array(), // Plugins whose notices are completely hidden everywhere
@@ -86,6 +87,7 @@ class WP_Quiet_Admin_Settings {
 		$sanitized = array(
 			'passthrough_high'           => ! empty( $new_settings['passthrough_high'] ),
 			'passthrough_core'           => ! empty( $new_settings['passthrough_core'] ),
+			'passthrough_sync_dismiss'   => ! empty( $new_settings['passthrough_sync_dismiss'] ),
 			'show_admin_bar'             => ! empty( $new_settings['show_admin_bar'] ),
 			'whitelisted_plugins'        => ! empty( $new_settings['whitelisted_plugins'] ) && is_array( $new_settings['whitelisted_plugins'] )
 				? array_values( array_map( 'sanitize_text_field', $new_settings['whitelisted_plugins'] ) )
