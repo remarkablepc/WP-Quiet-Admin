@@ -189,35 +189,48 @@ class WP_Quiet_Admin_Admin_Page {
 			wp_die( esc_html__( 'Unauthorized.', 'wp-quiet-admin' ) );
 		}
 
-		$whitelisted = array();
-		$blacklisted = array();
+		$current = $this->settings->get_all();
+		$save_section = isset( $_POST['qa_save_section'] ) ? sanitize_key( $_POST['qa_save_section'] ) : 'all';
 
-		if ( ! empty( $_POST['plugin_rules'] ) && is_array( $_POST['plugin_rules'] ) ) {
-			foreach ( $_POST['plugin_rules'] as $slug => $rule ) {
-				$slug = sanitize_text_field( $slug );
-				if ( 'whitelist' === $rule ) {
-					$whitelisted[] = $slug;
-				} elseif ( 'blacklist' === $rule ) {
-					$blacklisted[] = $slug;
-				}
-			}
+		$new_settings = $current;
+
+		if ( 'all' === $save_section || 'general' === $save_section ) {
+			$new_settings['passthrough_high']           = ! empty( $_POST['passthrough_high'] );
+			$new_settings['passthrough_core']           = ! empty( $_POST['passthrough_core'] );
+			$new_settings['show_admin_bar']             = ! empty( $_POST['show_admin_bar'] );
+			$new_settings['retention_days']             = isset( $_POST['retention_days'] ) ? absint( $_POST['retention_days'] ) : 7;
+			$new_settings['audit_retention_days']       = isset( $_POST['audit_retention_days'] ) ? absint( $_POST['audit_retention_days'] ) : 30;
+			$new_settings['restrict_purge_super_admin'] = ! empty( $_POST['restrict_purge_super_admin'] );
 		}
 
-		$new_settings = array(
-			'passthrough_high'           => ! empty( $_POST['passthrough_high'] ),
-			'passthrough_core'           => ! empty( $_POST['passthrough_core'] ),
-			'show_admin_bar'             => ! empty( $_POST['show_admin_bar'] ),
-			'whitelisted_plugins'        => $whitelisted,
-			'blacklisted_plugins'        => $blacklisted,
-			'retention_days'             => isset( $_POST['retention_days'] ) ? absint( $_POST['retention_days'] ) : 7,
-			'audit_retention_days'       => isset( $_POST['audit_retention_days'] ) ? absint( $_POST['audit_retention_days'] ) : 30,
-			'restrict_purge_super_admin' => ! empty( $_POST['restrict_purge_super_admin'] ),
-		);
+		if ( 'all' === $save_section || 'plugins' === $save_section ) {
+			$whitelisted = array();
+			$blacklisted = array();
+
+			if ( ! empty( $_POST['plugin_rules'] ) && is_array( $_POST['plugin_rules'] ) ) {
+				foreach ( $_POST['plugin_rules'] as $slug => $rule ) {
+					$slug = sanitize_text_field( $slug );
+					if ( 'whitelist' === $rule ) {
+						$whitelisted[] = $slug;
+					} elseif ( 'blacklist' === $rule ) {
+						$blacklisted[] = $slug;
+					}
+				}
+			}
+			$new_settings['whitelisted_plugins'] = $whitelisted;
+			$new_settings['blacklisted_plugins'] = $blacklisted;
+		}
 
 		$this->settings->update_all( $new_settings );
 
+		$log_msg = ( 'general' === $save_section )
+			? __( 'Updated Core urgency and pass-through rules.', 'wp-quiet-admin' )
+			: ( ( 'plugins' === $save_section )
+				? __( 'Updated plugin notice display rules.', 'wp-quiet-admin' )
+				: __( 'Updated Quiet Admin rules and urgency settings.', 'wp-quiet-admin' ) );
+
 		$this->notice_manager->log_audit( 'update_settings', array(
-			'summary' => __( 'Updated Quiet Admin rules and urgency settings.', 'wp-quiet-admin' ),
+			'summary' => $log_msg,
 		) );
 
 		wp_safe_redirect( add_query_arg( array( 'page' => 'wp-quiet-admin', 'tab' => 'settings', 'saved' => '1' ), admin_url( 'index.php' ) ) );
@@ -1363,6 +1376,12 @@ class WP_Quiet_Admin_Admin_Page {
 							</td>
 						</tr>
 					</table>
+
+					<div class="qa-card-actions">
+						<button type="submit" name="qa_save_section" value="general" class="button button-primary button-large qa-btn-save-section">
+							<span class="dashicons dashicons-saved"></span> <?php esc_html_e( 'Save Urgency & Pass-Through Rules', 'wp-quiet-admin' ); ?>
+						</button>
+					</div>
 				</div>
 			</div>
 
@@ -1438,14 +1457,14 @@ class WP_Quiet_Admin_Admin_Page {
 							</tbody>
 						</table>
 					</div>
+
+					<div class="qa-card-actions">
+						<button type="submit" name="qa_save_section" value="plugins" class="button button-primary button-large qa-btn-save-section">
+							<span class="dashicons dashicons-saved"></span> <?php esc_html_e( 'Save Plugin Notice Rules', 'wp-quiet-admin' ); ?>
+						</button>
+					</div>
 				</div>
 			</div>
-
-			<p class="submit qa-save-rules-bar">
-				<button type="submit" class="button button-primary button-hero">
-					<span class="dashicons dashicons-saved"></span> <?php esc_html_e( 'Save Quiet Admin Rules', 'wp-quiet-admin' ); ?>
-				</button>
-			</p>
 		</form>
 
 		<!-- Card 3: User Action Audit Trail (Location Theme) -->

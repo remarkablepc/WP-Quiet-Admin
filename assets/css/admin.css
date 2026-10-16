@@ -609,8 +609,32 @@
 	box-shadow: none;
 }
 
-.qa-save-rules-bar {
-	margin: 20px 0 28px 0;
+.qa-card-actions {
+	margin-top: 24px;
+	padding-top: 18px;
+	border-top: 1px solid #e2e8f0;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.qa-btn-save-section {
+	height: 38px !important;
+	line-height: 36px !important;
+	font-size: 13px !important;
+	font-weight: 600 !important;
+	padding: 0 18px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 6px !important;
+	border-radius: 6px !important;
+}
+
+.qa-btn-save-section .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	line-height: 16px;
 }
 
 .qa-settings-section h3 {
