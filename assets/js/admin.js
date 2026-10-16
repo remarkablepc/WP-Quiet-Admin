@@ -21,6 +21,7 @@
 		initClearAll();
 		initQuickFilters();
 		initSettingsCheckboxes();
+		initCollapsibleSections();
 		initWpSubfilters();
 		initMutedSubfilters();
 		initHistorySubfilters();
@@ -1048,5 +1049,64 @@
 			$('.qa-btn-clear-all').prop('disabled', true);
 			$('.qa-btn-dismiss-tab').prop('disabled', true);
 		}
+	}
+	/**
+	 * Make each Rules & Settings section collapsible.
+	 * First section is open by default; open/closed state persists in localStorage.
+	 */
+	function initCollapsibleSections() {
+		var $sections = $('.qa-settings-section').not('.qa-support-section');
+		if (!$sections.length) { return; }
+
+		var storeKey = 'wpqaSettingsSections';
+		var state = {};
+		try { state = JSON.parse(window.localStorage.getItem(storeKey)) || {}; } catch (e) { state = {}; }
+
+		function save() {
+			try { window.localStorage.setItem(storeKey, JSON.stringify(state)); } catch (e) {}
+		}
+
+		function setOpen($section, open, persist) {
+			$section.toggleClass('is-collapsed', !open);
+			$section.find('.qa-section-toggle').attr('aria-expanded', open ? 'true' : 'false');
+			$section.data('qaHidden').toggleClass('qa-section-hidden', !open);
+			if (persist) { state[$section.data('qaKey')] = open ? 1 : 0; save(); }
+		}
+
+		$sections.each(function (i) {
+			var $section = $(this);
+			var $title = $section.find('h3').first();
+			if (!$title.length) { return; }
+
+			// Hide everything in the section except the path leading to the title.
+			var $hidden = $();
+			var node = $title[0];
+			while (node && node !== this) {
+				var $sibs = $(node).siblings();
+				$hidden = $hidden.add($sibs);
+				node = node.parentNode;
+			}
+
+			$section.addClass('qa-collapsible').data('qaHidden', $hidden).data('qaKey', i);
+			$title.addClass('qa-section-toggle').attr({ role: 'button', tabindex: 0 })
+				.append('<span class="qa-section-chevron dashicons dashicons-arrow-down-alt2" aria-hidden="true"></span>');
+
+			var open = (typeof state[i] !== 'undefined') ? !!state[i] : (i === 0);
+			setOpen($section, open, false);
+
+			$title.on('click keydown', function (e) {
+				if (e.type === 'keydown' && e.which !== 13 && e.which !== 32) { return; }
+				e.preventDefault();
+				setOpen($section, $section.hasClass('is-collapsed'), true);
+			});
+		});
+
+		var $bar = $('<p class="qa-sections-toolbar"><a href="#" class="qa-expand-all">Expand all</a> | <a href="#" class="qa-collapse-all">Collapse all</a></p>');
+		$sections.first().before($bar);
+		$bar.on('click', 'a', function (e) {
+			e.preventDefault();
+			var open = $(this).hasClass('qa-expand-all');
+			$sections.filter('.qa-collapsible').each(function () { setOpen($(this), open, true); });
+		});
 	}
 })(jQuery);

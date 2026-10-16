@@ -1832,3 +1832,12 @@ button:disabled .dashicons-lock {
 	display: none !important;
 }
 
+
+/* Collapsible settings sections */
+.qa-sections-toolbar { margin: 0 0 8px; font-size: 13px; }
+.qa-section-toggle { cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: space-between; }
+.qa-section-toggle:focus { outline: 2px solid #2271b1; outline-offset: 2px; }
+.qa-section-chevron { transition: transform .15s ease; color: #646970; }
+.qa-settings-section.is-collapsed .qa-section-chevron { transform: rotate(-90deg); }
+.qa-section-hidden { display: none !important; }
+.qa-settings-section.is-collapsed .qa-section-toggle { margin-bottom: 0; }
