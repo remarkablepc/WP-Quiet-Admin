@@ -1051,62 +1051,121 @@
 		}
 	}
 	/**
-	 * Make each Rules & Settings section collapsible.
-	 * First section is open by default; open/closed state persists in localStorage.
+	 * Formula Rate Shipping styled collapsible section cards.
+	 * Smooth slideToggle, localStorage persistence, and live summary updates.
 	 */
 	function initCollapsibleSections() {
-		var $sections = $('.qa-settings-section').not('.qa-support-section');
-		if (!$sections.length) { return; }
+		var $cards = $('.formula-section-card');
+		if (!$cards.length) { return; }
 
-		var storeKey = 'wpqaSettingsSections';
+		var storeKey = 'wpqaSettingsSections_v2';
 		var state = {};
 		try { state = JSON.parse(window.localStorage.getItem(storeKey)) || {}; } catch (e) { state = {}; }
 
-		function save() {
+		function saveState() {
 			try { window.localStorage.setItem(storeKey, JSON.stringify(state)); } catch (e) {}
 		}
 
-		function setOpen($section, open, persist) {
-			$section.toggleClass('is-collapsed', !open);
-			$section.find('.qa-section-toggle').attr('aria-expanded', open ? 'true' : 'false');
-			$section.data('qaHidden').toggleClass('qa-section-hidden', !open);
-			if (persist) { state[$section.data('qaKey')] = open ? 1 : 0; save(); }
-		}
+		// Initial open/closed setup
+		$cards.each(function (i) {
+			var $card = $(this);
+			var sectionId = $card.attr('data-qa-section') || ('section_' + i);
+			$card.data('qaSectionId', sectionId);
 
-		$sections.each(function (i) {
-			var $section = $(this);
-			var $title = $section.find('h3').first();
-			if (!$title.length) { return; }
-
-			// Hide everything in the section except the path leading to the title.
-			var $hidden = $();
-			var node = $title[0];
-			while (node && node !== this) {
-				var $sibs = $(node).siblings();
-				$hidden = $hidden.add($sibs);
-				node = node.parentNode;
+			// Section 1 (index 0) open by default; others collapsed unless stored otherwise
+			var isOpen = (typeof state[sectionId] !== 'undefined') ? !!state[sectionId] : (i === 0);
+			if (isOpen) {
+				$card.removeClass('is-collapsed');
+				$card.find('.card-body').show();
+			} else {
+				$card.addClass('is-collapsed');
+				$card.find('.card-body').hide();
 			}
+		});
 
-			$section.addClass('qa-collapsible').data('qaHidden', $hidden).data('qaKey', i);
-			$title.addClass('qa-section-toggle').attr({ role: 'button', tabindex: 0 })
-				.append('<span class="qa-section-chevron dashicons dashicons-arrow-down-alt2" aria-hidden="true"></span>');
+		// Toggle on summary bar click or header click
+		$(document).off('click', '.formula-section-card .card-summary-bar, .formula-section-card .card-header').on('click', '.formula-section-card .card-summary-bar, .formula-section-card .card-header', function (e) {
+			if ($(e.target).closest('a, button, input, select, label').length) {
+				return;
+			}
+			e.preventDefault();
 
-			var open = (typeof state[i] !== 'undefined') ? !!state[i] : (i === 0);
-			setOpen($section, open, false);
+			var $card = $(this).closest('.formula-section-card');
+			var $body = $card.find('.card-body');
+			var sectionId = $card.data('qaSectionId');
 
-			$title.on('click keydown', function (e) {
-				if (e.type === 'keydown' && e.which !== 13 && e.which !== 32) { return; }
-				e.preventDefault();
-				setOpen($section, $section.hasClass('is-collapsed'), true);
+			$body.stop(true, true).slideToggle(200, function () {
+				var nowOpen = $body.is(':visible');
+				if (nowOpen) {
+					$card.removeClass('is-collapsed');
+				} else {
+					$card.addClass('is-collapsed');
+				}
+				state[sectionId] = nowOpen ? 1 : 0;
+				saveState();
 			});
 		});
 
-		var $bar = $('<p class="qa-sections-toolbar"><a href="#" class="qa-expand-all">Expand all</a> | <a href="#" class="qa-collapse-all">Collapse all</a></p>');
-		$sections.first().before($bar);
-		$bar.on('click', 'a', function (e) {
+		// Toolbar Expand All / Collapse All
+		$('.qa-sections-toolbar').on('click', '.qa-expand-all', function (e) {
 			e.preventDefault();
-			var open = $(this).hasClass('qa-expand-all');
-			$sections.filter('.qa-collapsible').each(function () { setOpen($(this), open, true); });
+			$cards.each(function () {
+				var $card = $(this);
+				$card.removeClass('is-collapsed');
+				$card.find('.card-body').stop(true, true).slideDown(200);
+				state[$card.data('qaSectionId')] = 1;
+			});
+			saveState();
+		});
+
+		$('.qa-sections-toolbar').on('click', '.qa-collapse-all', function (e) {
+			e.preventDefault();
+			$cards.each(function () {
+				var $card = $(this);
+				$card.addClass('is-collapsed');
+				$card.find('.card-body').stop(true, true).slideUp(200);
+				state[$card.data('qaSectionId')] = 0;
+			});
+			saveState();
+		});
+
+		// Live Dynamic Summary Updates (just like Formula Rate Shipping updateDynamicSummaries)
+		function updateDynamicSummaries() {
+			// Card 1: Urgency & Pass-Through
+			var passHigh = $('input[name="passthrough_high"]').is(':checked');
+			var passCore = $('input[name="passthrough_core"]').is(':checked');
+			var retention = $('input[name="retention_days"]').val() || '30';
+
+			var $sGeneral = $('#qa_summary_general');
+			if ($sGeneral.length) {
+				$sGeneral.empty()
+					.append('<span>Critical Notices: <strong class="summary-pill">' + (passHigh ? 'Pass-Through' : 'Hub Only') + '</strong></span>')
+					.append('<span>Core Updates: <strong class="summary-pill">' + (passCore ? 'Pass-Through' : 'Hub Only') + '</strong></span>')
+					.append('<span>Retention: <strong class="summary-pill">' + retention + ' Days</strong></span>');
+			}
+
+			// Card 2: Plugin Notice Rules
+			var $ruleRadios = $('input[name^="plugin_rules"]:checked');
+			var white = 0;
+			var black = 0;
+			$ruleRadios.each(function () {
+				var v = $(this).val();
+				if (v === 'whitelist') { white++; }
+				else if (v === 'blacklist') { black++; }
+			});
+			var total = $('.qa-plugins-table tbody tr').not(':has(td[colspan])').length;
+
+			var $sPlugins = $('#qa_summary_plugin_rules');
+			if ($sPlugins.length) {
+				$sPlugins.empty()
+					.append('<span>Total Plugins: <strong class="summary-pill">' + total + '</strong></span>')
+					.append('<span>Show in Admin: <strong class="summary-pill summary-pill-green">' + white + '</strong></span>')
+					.append('<span>Mute Everywhere: <strong class="summary-pill summary-pill-red">' + black + '</strong></span>');
+			}
+		}
+
+		$(document.body).on('change input', '.formula-section-card input, .formula-section-card select', function () {
+			setTimeout(updateDynamicSummaries, 30);
 		});
 	}
 })(jQuery);

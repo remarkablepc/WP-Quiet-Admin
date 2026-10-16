@@ -1263,285 +1263,352 @@ class WP_Quiet_Admin_Admin_Page {
 		$blacklisted       = (array) $settings['blacklisted_plugins'];
 		$audit_log         = $this->notice_manager->get_audit_log();
 		$can_purge         = $this->settings->current_user_can_purge();
+		$white_count       = count( $whitelisted );
+		$black_count       = count( $blacklisted );
+		$total_plugins     = count( $installed_plugins );
+		$audit_count       = is_array( $audit_log ) ? count( $audit_log ) : 0;
 		?>
 		<form method="post" action="<?php echo esc_url( admin_url( 'index.php?page=wp-quiet-admin&tab=settings' ) ); ?>" class="qa-settings-form">
 			<?php wp_nonce_field( 'wp_quiet_admin_save_settings', 'wp_quiet_admin_settings_nonce' ); ?>
 
-			<!-- Urgent Pass-Through & Retention Section -->
-			<div class="qa-settings-section">
-				<h3><?php esc_html_e( 'Urgency & Pass-Through Rules', 'wp-quiet-admin' ); ?></h3>
-				<p class="description">
-					<?php esc_html_e( 'Control whether high-priority alerts bypass Quiet Admin and show directly at the top of regular admin pages.', 'wp-quiet-admin' ); ?>
-				</p>
+			<p class="qa-sections-toolbar">
+				<a href="#" class="qa-expand-all"><span class="dashicons dashicons-arrow-down-alt2"></span> <?php esc_html_e( 'Expand All', 'wp-quiet-admin' ); ?></a>
+				<span class="qa-toolbar-sep">|</span>
+				<a href="#" class="qa-collapse-all"><span class="dashicons dashicons-arrow-up-alt2"></span> <?php esc_html_e( 'Collapse All', 'wp-quiet-admin' ); ?></a>
+			</p>
 
-				<table class="form-table" role="presentation">
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Critical (Red) Notices', 'wp-quiet-admin' ); ?></th>
-						<td>
-							<label>
-								<input type="checkbox" name="passthrough_high" value="1" <?php checked( $settings['passthrough_high'] ); ?> />
-								<strong><?php esc_html_e( 'Pass-through Critical / Red Notices', 'wp-quiet-admin' ); ?></strong>
-							</label>
-							<p class="description">
-								<?php esc_html_e( '(Recommended) Always render fatal errors, database alerts, and security warnings directly on page headers so you never miss breaking issues. They will also still be cataloged in the Critical hub.', 'wp-quiet-admin' ); ?>
-							</p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'WordPress Core Updates', 'wp-quiet-admin' ); ?></th>
-						<td>
-							<label>
-								<input type="checkbox" name="passthrough_core" value="1" <?php checked( $settings['passthrough_core'] ); ?> />
-								<strong><?php esc_html_e( 'Pass-through WordPress Core Notices', 'wp-quiet-admin' ); ?></strong>
-							</label>
-							<p class="description">
-								<?php esc_html_e( 'Allow official WordPress update notifications and update nags to appear normally on standard pages.', 'wp-quiet-admin' ); ?>
-							</p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Admin Toolbar Badge', 'wp-quiet-admin' ); ?></th>
-						<td>
-							<label>
-								<input type="checkbox" name="show_admin_bar" value="1" <?php checked( $settings['show_admin_bar'] ); ?> />
-								<strong><?php esc_html_e( 'Show Quiet Admin multi-pill badges in Admin Bar', 'wp-quiet-admin' ); ?></strong>
-							</label>
-							<p class="description">
-								<?php esc_html_e( 'Displays the live color-coded pill counters (🔴 Critical, 🟡 Warnings, 🟢 Reviews & Promos) in the top toolbar.', 'wp-quiet-admin' ); ?>
-							</p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Notice Retention', 'wp-quiet-admin' ); ?></th>
-						<td>
-							<input type="number" name="retention_days" min="1" max="60" value="<?php echo esc_attr( $settings['retention_days'] ); ?>" class="small-text" /> <?php esc_html_e( 'Days', 'wp-quiet-admin' ); ?>
-							<p class="description"><?php esc_html_e( 'Automatically purge non-critical promotional and routine notices after this number of days. Unresolved critical alerts and snoozed notices are permanently preserved and never auto-purged.', 'wp-quiet-admin' ); ?></p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Audit Trail Retention', 'wp-quiet-admin' ); ?></th>
-						<td>
-							<input type="number" name="audit_retention_days" min="7" max="180" value="<?php echo esc_attr( $settings['audit_retention_days'] ?? 30 ); ?>" class="small-text" /> <?php esc_html_e( 'Days', 'wp-quiet-admin' ); ?>
-							<p class="description"><?php esc_html_e( 'Length of time to preserve administrative user actions (dismissals, snoozes, wakes, archive purges) in the audit log.', 'wp-quiet-admin' ); ?></p>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row"><?php esc_html_e( 'Purge Permissions', 'wp-quiet-admin' ); ?></th>
-						<td>
-							<label>
-								<input type="checkbox" name="restrict_purge_super_admin" value="1" <?php checked( ! empty( $settings['restrict_purge_super_admin'] ) ); ?> />
-								<strong><?php esc_html_e( 'Restrict Permanent Purge to Primary Administrator / Super Admin', 'wp-quiet-admin' ); ?></strong>
-							</label>
-							<p class="description">
-								<?php esc_html_e( 'When enabled, only Network Super Administrators (Multisite) or Chief Administrators with user deletion capability (Single Site) can permanently clear or purge the notice archive. Standard administrators can dismiss and snooze notices, but cannot erase incident archives.', 'wp-quiet-admin' ); ?>
-							</p>
-						</td>
-					</tr>
-				</table>
-			</div>
+			<!-- Card 1: Urgency & Pass-Through Rules (General Theme) -->
+			<div class="formula-section-card card-theme-general" data-qa-section="general">
+				<div class="card-header">
+					<h3>
+						<span class="dashicons dashicons-shield"></span>
+						<?php esc_html_e( '1. Urgency & Pass-Through Rules', 'wp-quiet-admin' ); ?>
+					</h3>
+					<span class="card-badge"><?php esc_html_e( 'Core Engine', 'wp-quiet-admin' ); ?></span>
+				</div>
+				<div class="card-summary-bar">
+					<div class="card-summary-text" id="qa_summary_general">
+						<span><?php esc_html_e( 'Critical Notices:', 'wp-quiet-admin' ); ?> <strong class="summary-pill"><?php echo ! empty( $settings['passthrough_high'] ) ? esc_html__( 'Pass-Through', 'wp-quiet-admin' ) : esc_html__( 'Hub Only', 'wp-quiet-admin' ); ?></strong></span>
+						<span><?php esc_html_e( 'Core Updates:', 'wp-quiet-admin' ); ?> <strong class="summary-pill"><?php echo ! empty( $settings['passthrough_core'] ) ? esc_html__( 'Pass-Through', 'wp-quiet-admin' ) : esc_html__( 'Hub Only', 'wp-quiet-admin' ); ?></strong></span>
+						<span><?php esc_html_e( 'Retention:', 'wp-quiet-admin' ); ?> <strong class="summary-pill"><?php echo esc_html( (int) $settings['retention_days'] ); ?> <?php esc_html_e( 'Days', 'wp-quiet-admin' ); ?></strong></span>
+					</div>
+					<span class="card-toggle-icon dashicons dashicons-arrow-up-alt2"></span>
+				</div>
+				<div class="card-body">
+					<p class="description" style="margin-bottom: 16px;">
+						<?php esc_html_e( 'Control whether high-priority alerts bypass Quiet Admin and show directly at the top of regular admin pages.', 'wp-quiet-admin' ); ?>
+					</p>
 
-			<!-- Plugin Rules Section -->
-			<div class="qa-settings-section">
-				<h3><?php esc_html_e( 'Plugin Notice Rules', 'wp-quiet-admin' ); ?></h3>
-				<p class="description">
-					<?php esc_html_e( 'Set rules per plugin. "Show in Admin" plugins also display notices on standard admin pages. "Mute Everywhere" plugins are completely silenced.', 'wp-quiet-admin' ); ?>
-				</p>
-
-				<div class="qa-plugins-table-wrapper">
-					<table class="wp-list-table widefat fixed striped qa-plugins-table">
-						<thead>
-							<tr>
-								<th class="manage-column column-name"><?php esc_html_e( 'Plugin Name', 'wp-quiet-admin' ); ?></th>
-								<th class="manage-column column-slug"><?php esc_html_e( 'Slug / Folder', 'wp-quiet-admin' ); ?></th>
-								<th class="manage-column column-status"><?php esc_html_e( 'Status', 'wp-quiet-admin' ); ?></th>
-								<th class="manage-column column-rule" style="width: 360px;"><?php esc_html_e( 'Notice Rule', 'wp-quiet-admin' ); ?></th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php if ( empty( $installed_plugins ) ) : ?>
-								<tr><td colspan="4"><?php esc_html_e( 'No plugins detected.', 'wp-quiet-admin' ); ?></td></tr>
-							<?php else : ?>
-								<?php foreach ( $installed_plugins as $slug => $plugin ) :
-									$is_white = in_array( $slug, $whitelisted, true );
-									$is_black = in_array( $slug, $blacklisted, true );
-								?>
-									<tr>
-										<td><strong><?php echo esc_html( $plugin['name'] ); ?></strong></td>
-										<td><code><?php echo esc_html( $slug ); ?></code></td>
-										<td>
-											<?php if ( $plugin['is_active'] ) : ?>
-												<span class="qa-status-tag qa-status-active"><?php esc_html_e( 'Active', 'wp-quiet-admin' ); ?></span>
-											<?php else : ?>
-												<span class="qa-status-tag qa-status-inactive"><?php esc_html_e( 'Inactive', 'wp-quiet-admin' ); ?></span>
-											<?php endif; ?>
-										</td>
-										<td>
-											<div class="qa-segmented-control" data-plugin-slug="<?php echo esc_attr( $slug ); ?>">
-												<label class="qa-segment <?php echo ( ! $is_white && ! $is_black ) ? 'is-active segment-normal' : ''; ?>" title="<?php esc_attr_e( 'Filter notices normally into Quiet Admin tabs', 'wp-quiet-admin' ); ?>">
-													<input type="radio" name="plugin_rules[<?php echo esc_attr( $slug ); ?>]" value="normal" <?php checked( ! $is_white && ! $is_black ); ?> />
-													<span><?php esc_html_e( 'Hub (Default)', 'wp-quiet-admin' ); ?></span>
-												</label>
-												<label class="qa-segment <?php echo $is_white ? 'is-active segment-whitelist' : ''; ?>" title="<?php esc_attr_e( 'Allow notices from this plugin to also show on regular admin screens', 'wp-quiet-admin' ); ?>">
-													<input type="radio" name="plugin_rules[<?php echo esc_attr( $slug ); ?>]" value="whitelist" <?php checked( $is_white ); ?> />
-													<span><?php esc_html_e( 'Show in Admin', 'wp-quiet-admin' ); ?></span>
-												</label>
-												<label class="qa-segment <?php echo $is_black ? 'is-active segment-blacklist' : ''; ?>" title="<?php esc_attr_e( 'Completely mute all notices from this plugin everywhere', 'wp-quiet-admin' ); ?>">
-													<input type="radio" name="plugin_rules[<?php echo esc_attr( $slug ); ?>]" value="blacklist" <?php checked( $is_black ); ?> />
-													<span><?php esc_html_e( 'Mute Everywhere', 'wp-quiet-admin' ); ?></span>
-												</label>
-											</div>
-										</td>
-									</tr>
-								<?php endforeach; ?>
-							<?php endif; ?>
-						</tbody>
+					<table class="form-table" role="presentation">
+						<tr>
+							<th scope="row"><?php esc_html_e( 'Critical (Red) Notices', 'wp-quiet-admin' ); ?></th>
+							<td>
+								<label>
+									<input type="checkbox" name="passthrough_high" value="1" <?php checked( $settings['passthrough_high'] ); ?> />
+									<strong><?php esc_html_e( 'Pass-through Critical / Red Notices', 'wp-quiet-admin' ); ?></strong>
+								</label>
+								<p class="description">
+									<?php esc_html_e( '(Recommended) Always render fatal errors, database alerts, and security warnings directly on page headers so you never miss breaking issues. They will also still be cataloged in the Critical hub.', 'wp-quiet-admin' ); ?>
+								</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><?php esc_html_e( 'WordPress Core Updates', 'wp-quiet-admin' ); ?></th>
+							<td>
+								<label>
+									<input type="checkbox" name="passthrough_core" value="1" <?php checked( $settings['passthrough_core'] ); ?> />
+									<strong><?php esc_html_e( 'Pass-through WordPress Core Notices', 'wp-quiet-admin' ); ?></strong>
+								</label>
+								<p class="description">
+									<?php esc_html_e( 'Allow official WordPress update notifications and update nags to appear normally on standard pages.', 'wp-quiet-admin' ); ?>
+								</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><?php esc_html_e( 'Admin Toolbar Badge', 'wp-quiet-admin' ); ?></th>
+							<td>
+								<label>
+									<input type="checkbox" name="show_admin_bar" value="1" <?php checked( $settings['show_admin_bar'] ); ?> />
+									<strong><?php esc_html_e( 'Show Quiet Admin multi-pill badges in Admin Bar', 'wp-quiet-admin' ); ?></strong>
+								</label>
+								<p class="description">
+									<?php esc_html_e( 'Displays the live color-coded pill counters (🔴 Critical, 🟡 Warnings, 🟢 Reviews & Promos) in the top toolbar.', 'wp-quiet-admin' ); ?>
+								</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><?php esc_html_e( 'Notice Retention', 'wp-quiet-admin' ); ?></th>
+							<td>
+								<input type="number" name="retention_days" min="1" max="60" value="<?php echo esc_attr( $settings['retention_days'] ); ?>" class="small-text" /> <?php esc_html_e( 'Days', 'wp-quiet-admin' ); ?>
+								<p class="description"><?php esc_html_e( 'Automatically purge non-critical promotional and routine notices after this number of days. Unresolved critical alerts and snoozed notices are permanently preserved and never auto-purged.', 'wp-quiet-admin' ); ?></p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><?php esc_html_e( 'Audit Trail Retention', 'wp-quiet-admin' ); ?></th>
+							<td>
+								<input type="number" name="audit_retention_days" min="7" max="180" value="<?php echo esc_attr( $settings['audit_retention_days'] ?? 30 ); ?>" class="small-text" /> <?php esc_html_e( 'Days', 'wp-quiet-admin' ); ?>
+								<p class="description"><?php esc_html_e( 'Length of time to preserve administrative user actions (dismissals, snoozes, wakes, archive purges) in the audit log.', 'wp-quiet-admin' ); ?></p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><?php esc_html_e( 'Purge Permissions', 'wp-quiet-admin' ); ?></th>
+							<td>
+								<label>
+									<input type="checkbox" name="restrict_purge_super_admin" value="1" <?php checked( ! empty( $settings['restrict_purge_super_admin'] ) ); ?> />
+									<strong><?php esc_html_e( 'Restrict Permanent Purge to Primary Administrator / Super Admin', 'wp-quiet-admin' ); ?></strong>
+								</label>
+								<p class="description">
+									<?php esc_html_e( 'When enabled, only Network Super Administrators (Multisite) or Chief Administrators with user deletion capability (Single Site) can permanently clear or purge the notice archive. Standard administrators can dismiss and snooze notices, but cannot erase incident archives.', 'wp-quiet-admin' ); ?>
+								</p>
+							</td>
+						</tr>
 					</table>
 				</div>
 			</div>
 
-			<p class="submit">
+			<!-- Card 2: Plugin Notice Rules (Item Rules Theme) -->
+			<div class="formula-section-card card-theme-item-rules" data-qa-section="plugin-rules">
+				<div class="card-header">
+					<h3>
+						<span class="dashicons dashicons-admin-plugins"></span>
+						<?php esc_html_e( '2. Plugin Notice Rules', 'wp-quiet-admin' ); ?>
+					</h3>
+					<span class="card-badge"><?php echo esc_html( sprintf( __( '%d Installed', 'wp-quiet-admin' ), $total_plugins ) ); ?></span>
+				</div>
+				<div class="card-summary-bar">
+					<div class="card-summary-text" id="qa_summary_plugin_rules">
+						<span><?php esc_html_e( 'Total Plugins:', 'wp-quiet-admin' ); ?> <strong class="summary-pill"><?php echo esc_html( $total_plugins ); ?></strong></span>
+						<span><?php esc_html_e( 'Show in Admin:', 'wp-quiet-admin' ); ?> <strong class="summary-pill summary-pill-green"><?php echo esc_html( $white_count ); ?></strong></span>
+						<span><?php esc_html_e( 'Mute Everywhere:', 'wp-quiet-admin' ); ?> <strong class="summary-pill summary-pill-red"><?php echo esc_html( $black_count ); ?></strong></span>
+					</div>
+					<span class="card-toggle-icon dashicons dashicons-arrow-up-alt2"></span>
+				</div>
+				<div class="card-body">
+					<p class="description" style="margin-bottom: 16px;">
+						<?php esc_html_e( 'Set rules per plugin. "Show in Admin" plugins also display notices on standard admin pages. "Mute Everywhere" plugins are completely silenced.', 'wp-quiet-admin' ); ?>
+					</p>
+
+					<div class="qa-plugins-table-wrapper">
+						<table class="wp-list-table widefat fixed striped qa-plugins-table">
+							<thead>
+								<tr>
+									<th class="manage-column column-name"><?php esc_html_e( 'Plugin Name', 'wp-quiet-admin' ); ?></th>
+									<th class="manage-column column-slug"><?php esc_html_e( 'Slug / Folder', 'wp-quiet-admin' ); ?></th>
+									<th class="manage-column column-status"><?php esc_html_e( 'Status', 'wp-quiet-admin' ); ?></th>
+									<th class="manage-column column-rule" style="width: 360px;"><?php esc_html_e( 'Notice Rule', 'wp-quiet-admin' ); ?></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php if ( empty( $installed_plugins ) ) : ?>
+									<tr><td colspan="4"><?php esc_html_e( 'No plugins detected.', 'wp-quiet-admin' ); ?></td></tr>
+								<?php else : ?>
+									<?php foreach ( $installed_plugins as $slug => $plugin ) :
+										$is_white = in_array( $slug, $whitelisted, true );
+										$is_black = in_array( $slug, $blacklisted, true );
+									?>
+										<tr>
+											<td><strong><?php echo esc_html( $plugin['name'] ); ?></strong></td>
+											<td><code><?php echo esc_html( $slug ); ?></code></td>
+											<td>
+												<?php if ( $plugin['is_active'] ) : ?>
+													<span class="qa-status-tag qa-status-active"><?php esc_html_e( 'Active', 'wp-quiet-admin' ); ?></span>
+												<?php else : ?>
+													<span class="qa-status-tag qa-status-inactive"><?php esc_html_e( 'Inactive', 'wp-quiet-admin' ); ?></span>
+												<?php endif; ?>
+											</td>
+											<td>
+												<div class="qa-segmented-control" data-plugin-slug="<?php echo esc_attr( $slug ); ?>">
+													<label class="qa-segment <?php echo ( ! $is_white && ! $is_black ) ? 'is-active segment-normal' : ''; ?>" title="<?php esc_attr_e( 'Filter notices normally into Quiet Admin tabs', 'wp-quiet-admin' ); ?>">
+														<input type="radio" name="plugin_rules[<?php echo esc_attr( $slug ); ?>]" value="normal" <?php checked( ! $is_white && ! $is_black ); ?> />
+														<span><?php esc_html_e( 'Hub (Default)', 'wp-quiet-admin' ); ?></span>
+													</label>
+													<label class="qa-segment <?php echo $is_white ? 'is-active segment-whitelist' : ''; ?>" title="<?php esc_attr_e( 'Allow notices from this plugin to also show on regular admin screens', 'wp-quiet-admin' ); ?>">
+														<input type="radio" name="plugin_rules[<?php echo esc_attr( $slug ); ?>]" value="whitelist" <?php checked( $is_white ); ?> />
+														<span><?php esc_html_e( 'Show in Admin', 'wp-quiet-admin' ); ?></span>
+													</label>
+													<label class="qa-segment <?php echo $is_black ? 'is-active segment-blacklist' : ''; ?>" title="<?php esc_attr_e( 'Completely mute all notices from this plugin everywhere', 'wp-quiet-admin' ); ?>">
+														<input type="radio" name="plugin_rules[<?php echo esc_attr( $slug ); ?>]" value="blacklist" <?php checked( $is_black ); ?> />
+														<span><?php esc_html_e( 'Mute Everywhere', 'wp-quiet-admin' ); ?></span>
+													</label>
+												</div>
+											</td>
+										</tr>
+									<?php endforeach; ?>
+								<?php endif; ?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<p class="submit qa-save-rules-bar">
 				<button type="submit" class="button button-primary button-hero">
 					<span class="dashicons dashicons-saved"></span> <?php esc_html_e( 'Save Quiet Admin Rules', 'wp-quiet-admin' ); ?>
 				</button>
 			</p>
 		</form>
 
-		<!-- Section 3: User Action Audit Trail -->
-		<div class="qa-settings-section qa-audit-section">
-			<div class="qa-audit-header-flex">
-				<div>
-					<h3>
-						<span class="dashicons dashicons-list-view" style="margin-right: 6px; color: #2271b1; vertical-align: middle;"></span>
-						<?php esc_html_e( 'User Action Audit Trail', 'wp-quiet-admin' ); ?>
-					</h3>
-					<p class="description">
-						<?php esc_html_e( 'Tracks which administrator dismissed, snoozed, awakened, or purged notices. Automatically pruned according to your audit retention threshold.', 'wp-quiet-admin' ); ?>
-					</p>
-				</div>
-				<div>
-					<form method="post" action="<?php echo esc_url( admin_url( 'index.php?page=wp-quiet-admin&tab=settings' ) ); ?>" onsubmit="return confirm('<?php echo esc_js( __( 'Are you sure you want to permanently clear the audit trail?', 'wp-quiet-admin' ) ); ?>');">
-						<?php wp_nonce_field( 'wp_quiet_admin_clear_audit_action', 'wp_quiet_admin_clear_audit_nonce' ); ?>
-						<button type="submit" class="button button-secondary button-small qa-btn-clear-audit" <?php echo ( empty( $audit_log ) || ! $can_purge ) ? 'disabled' : ''; ?> title="<?php echo ( ! $can_purge ) ? esc_attr__( 'Clearing the audit trail requires primary administrator privileges.', 'wp-quiet-admin' ) : ''; ?>">
-							<span class="dashicons <?php echo ( ! $can_purge ) ? 'dashicons-lock' : 'dashicons-trash'; ?>"></span> <?php esc_html_e( 'Clear Audit Trail', 'wp-quiet-admin' ); ?>
-						</button>
-					</form>
-				</div>
+		<!-- Card 3: User Action Audit Trail (Location Theme) -->
+		<div class="formula-section-card card-theme-location qa-audit-section" data-qa-section="audit">
+			<div class="card-header">
+				<h3>
+					<span class="dashicons dashicons-list-view"></span>
+					<?php esc_html_e( '3. User Action Audit Trail', 'wp-quiet-admin' ); ?>
+				</h3>
+				<span class="card-badge"><?php echo esc_html( sprintf( __( '%d Events', 'wp-quiet-admin' ), $audit_count ) ); ?></span>
 			</div>
-
-			<div class="qa-audit-table-wrapper">
-				<?php if ( empty( $audit_log ) ) : ?>
-					<div class="qa-audit-empty">
-						<span class="dashicons dashicons-info-outline"></span>
-						<p><?php esc_html_e( 'No actions recorded yet. User dismissals, snoozes, wakes, and archive purges will be logged here.', 'wp-quiet-admin' ); ?></p>
-					</div>
-				<?php else : ?>
-					<table class="wp-list-table widefat fixed striped qa-audit-table">
-						<thead>
-							<tr>
-								<th class="column-time" style="width: 170px;"><?php esc_html_e( 'Date & Time', 'wp-quiet-admin' ); ?></th>
-								<th class="column-user" style="width: 180px;"><?php esc_html_e( 'User', 'wp-quiet-admin' ); ?></th>
-								<th class="column-action" style="width: 140px;"><?php esc_html_e( 'Action', 'wp-quiet-admin' ); ?></th>
-								<th class="column-details"><?php esc_html_e( 'Event Summary', 'wp-quiet-admin' ); ?></th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php foreach ( $audit_log as $entry ) :
-								$action_key   = $entry['action'] ?? 'unknown';
-								$action_label = ucfirst( str_replace( '_', ' ', $action_key ) );
-								$badge_class  = 'badge-info';
-								if ( in_array( $action_key, array( 'dismiss', 'bulk_dismiss', 'dismiss_tab' ), true ) ) {
-									$badge_class = 'badge-dismiss';
-								} elseif ( in_array( $action_key, array( 'snooze', 'bulk_snooze' ), true ) ) {
-									$badge_class = 'badge-snooze';
-								} elseif ( in_array( $action_key, array( 'restore', 'unsnooze', 'wake_all' ), true ) ) {
-									$badge_class = 'badge-wake';
-								} elseif ( in_array( $action_key, array( 'purge_archive', 'clear_all' ), true ) ) {
-									$badge_class = 'badge-purge';
-								}
-								$summary = $entry['details']['summary'] ?? ( $entry['details']['details'] ?? $action_label );
-							?>
-								<tr>
-									<td>
-										<strong><?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $entry['timestamp'] ) ); ?></strong>
-										<div class="qa-audit-ago"><?php echo esc_html( human_time_diff( $entry['timestamp'], time() ) . ' ' . __( 'ago', 'wp-quiet-admin' ) ); ?></div>
-									</td>
-									<td>
-										<div class="qa-audit-user">
-											<?php if ( ! empty( $entry['user_id'] ) ) : ?>
-												<?php echo get_avatar( $entry['user_id'], 22 ); ?>
-											<?php else : ?>
-												<span class="dashicons dashicons-admin-users"></span>
-											<?php endif; ?>
-											<span class="qa-audit-username"><?php echo esc_html( $entry['user_name'] ?? $entry['user_login'] ); ?></span>
-											<code class="qa-audit-login"><?php echo esc_html( $entry['user_login'] ); ?></code>
-										</div>
-									</td>
-									<td>
-										<span class="qa-audit-badge <?php echo esc_attr( $badge_class ); ?>">
-											<?php echo esc_html( $action_label ); ?>
-										</span>
-									</td>
-									<td>
-										<span class="qa-audit-summary-text"><?php echo esc_html( $summary ); ?></span>
-									</td>
-								</tr>
-							<?php endforeach; ?>
-						</tbody>
-					</table>
-				<?php endif; ?>
+			<div class="card-summary-bar">
+				<div class="card-summary-text">
+					<span><?php esc_html_e( 'Logged Actions:', 'wp-quiet-admin' ); ?> <strong class="summary-pill"><?php echo esc_html( $audit_count ); ?></strong></span>
+					<span><?php esc_html_e( 'Auto-Pruning:', 'wp-quiet-admin' ); ?> <strong class="summary-pill"><?php echo esc_html( (int) ( $settings['audit_retention_days'] ?? 30 ) ); ?> <?php esc_html_e( 'Days', 'wp-quiet-admin' ); ?></strong></span>
+				</div>
+				<span class="card-toggle-icon dashicons dashicons-arrow-up-alt2"></span>
 			</div>
-		</div>
-
-		<!-- Section 4: Configuration Export & Import -->
-		<div class="qa-settings-section qa-portability-section">
-			<h3>
-				<span class="dashicons dashicons-cloud" style="margin-right: 6px; color: #2271b1; vertical-align: middle;"></span>
-				<?php esc_html_e( 'Export & Import Configuration', 'wp-quiet-admin' ); ?>
-			</h3>
-			<p class="description">
-				<?php esc_html_e( 'Back up your rules or transfer your "Show in Admin" pass-through whitelist and "Mute Everywhere" blacklist to another WordPress installation.', 'wp-quiet-admin' ); ?>
-			</p>
-
-			<div class="qa-portability-grid">
-				<!-- Export Box -->
-				<div class="qa-portability-box">
-					<div class="qa-portability-box-inner">
-						<h4>
-							<span class="dashicons dashicons-download"></span>
-							<?php esc_html_e( 'Export Settings', 'wp-quiet-admin' ); ?>
-						</h4>
-						<p>
-							<?php esc_html_e( 'Download a JSON file containing all plugin display rules, pass-through preferences, and retention thresholds.', 'wp-quiet-admin' ); ?>
+			<div class="card-body">
+				<div class="qa-audit-header-flex">
+					<div>
+						<p class="description" style="margin: 0;">
+							<?php esc_html_e( 'Tracks which administrator dismissed, snoozed, awakened, or purged notices. Automatically pruned according to your audit retention threshold.', 'wp-quiet-admin' ); ?>
 						</p>
-						<form method="post" action="<?php echo esc_url( admin_url( 'index.php?page=wp-quiet-admin&tab=settings' ) ); ?>">
-							<?php wp_nonce_field( 'wp_quiet_admin_export_settings', 'wp_quiet_admin_export_nonce' ); ?>
-							<button type="submit" class="button button-secondary">
-								<span class="dashicons dashicons-download"></span> <?php esc_html_e( 'Download Export (.json)', 'wp-quiet-admin' ); ?>
+					</div>
+					<div>
+						<form method="post" action="<?php echo esc_url( admin_url( 'index.php?page=wp-quiet-admin&tab=settings' ) ); ?>" onsubmit="return confirm('<?php echo esc_js( __( 'Are you sure you want to permanently clear the audit trail?', 'wp-quiet-admin' ) ); ?>');">
+							<?php wp_nonce_field( 'wp_quiet_admin_clear_audit_action', 'wp_quiet_admin_clear_audit_nonce' ); ?>
+							<button type="submit" class="button button-secondary button-small qa-btn-clear-audit" <?php echo ( empty( $audit_log ) || ! $can_purge ) ? 'disabled' : ''; ?> title="<?php echo ( ! $can_purge ) ? esc_attr__( 'Clearing the audit trail requires primary administrator privileges.', 'wp-quiet-admin' ) : ''; ?>">
+								<span class="dashicons <?php echo ( ! $can_purge ) ? 'dashicons-lock' : 'dashicons-trash'; ?>"></span> <?php esc_html_e( 'Clear Audit Trail', 'wp-quiet-admin' ); ?>
 							</button>
 						</form>
 					</div>
 				</div>
 
-				<!-- Import Box -->
-				<div class="qa-portability-box">
-					<div class="qa-portability-box-inner">
-						<h4>
-							<span class="dashicons dashicons-upload"></span>
-							<?php esc_html_e( 'Import Settings', 'wp-quiet-admin' ); ?>
-						</h4>
-						<p>
-							<?php esc_html_e( 'Upload a valid WP Quiet Admin JSON settings file. Imported rules will be merged with your current settings.', 'wp-quiet-admin' ); ?>
-						</p>
-						<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'index.php?page=wp-quiet-admin&tab=settings' ) ); ?>">
-							<?php wp_nonce_field( 'wp_quiet_admin_import_settings', 'wp_quiet_admin_import_nonce' ); ?>
-							<div class="qa-import-file-row">
-								<input type="file" name="import_file" accept=".json,application/json" required />
-								<button type="submit" class="button button-primary">
-									<span class="dashicons dashicons-upload"></span> <?php esc_html_e( 'Import Settings', 'wp-quiet-admin' ); ?>
+				<div class="qa-audit-table-wrapper" style="margin-top: 14px;">
+					<?php if ( empty( $audit_log ) ) : ?>
+						<div class="qa-audit-empty">
+							<span class="dashicons dashicons-info-outline"></span>
+							<p><?php esc_html_e( 'No actions recorded yet. User dismissals, snoozes, wakes, and archive purges will be logged here.', 'wp-quiet-admin' ); ?></p>
+						</div>
+					<?php else : ?>
+						<table class="wp-list-table widefat fixed striped qa-audit-table">
+							<thead>
+								<tr>
+									<th class="column-time" style="width: 170px;"><?php esc_html_e( 'Date & Time', 'wp-quiet-admin' ); ?></th>
+									<th class="column-user" style="width: 180px;"><?php esc_html_e( 'User', 'wp-quiet-admin' ); ?></th>
+									<th class="column-action" style="width: 140px;"><?php esc_html_e( 'Action', 'wp-quiet-admin' ); ?></th>
+									<th class="column-details"><?php esc_html_e( 'Event Summary', 'wp-quiet-admin' ); ?></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach ( $audit_log as $entry ) :
+									$action_key   = $entry['action'] ?? 'unknown';
+									$action_label = ucfirst( str_replace( '_', ' ', $action_key ) );
+									$badge_class  = 'badge-info';
+									if ( in_array( $action_key, array( 'dismiss', 'bulk_dismiss', 'dismiss_tab' ), true ) ) {
+										$badge_class = 'badge-dismiss';
+									} elseif ( in_array( $action_key, array( 'snooze', 'bulk_snooze' ), true ) ) {
+										$badge_class = 'badge-snooze';
+									} elseif ( in_array( $action_key, array( 'restore', 'unsnooze', 'wake_all' ), true ) ) {
+										$badge_class = 'badge-wake';
+									} elseif ( in_array( $action_key, array( 'purge_archive', 'clear_all' ), true ) ) {
+										$badge_class = 'badge-purge';
+									}
+									$summary = $entry['details']['summary'] ?? ( $entry['details']['details'] ?? $action_label );
+								?>
+									<tr>
+										<td>
+											<strong><?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $entry['timestamp'] ) ); ?></strong>
+											<div class="qa-audit-ago"><?php echo esc_html( human_time_diff( $entry['timestamp'], time() ) . ' ' . __( 'ago', 'wp-quiet-admin' ) ); ?></div>
+										</td>
+										<td>
+											<div class="qa-audit-user">
+												<?php if ( ! empty( $entry['user_id'] ) ) : ?>
+													<?php echo get_avatar( $entry['user_id'], 22 ); ?>
+												<?php else : ?>
+													<span class="dashicons dashicons-admin-users"></span>
+												<?php endif; ?>
+												<span class="qa-audit-username"><?php echo esc_html( $entry['user_name'] ?? $entry['user_login'] ); ?></span>
+												<code class="qa-audit-login"><?php echo esc_html( $entry['user_login'] ); ?></code>
+											</div>
+										</td>
+										<td>
+											<span class="qa-audit-badge <?php echo esc_attr( $badge_class ); ?>">
+												<?php echo esc_html( $action_label ); ?>
+											</span>
+										</td>
+										<td>
+											<span class="qa-audit-summary-text"><?php echo esc_html( $summary ); ?></span>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+
+		<!-- Card 4: Configuration Export & Import (Import-Export Theme) -->
+		<div class="formula-section-card card-theme-import-export qa-portability-section" data-qa-section="portability">
+			<div class="card-header">
+				<h3>
+					<span class="dashicons dashicons-cloud"></span>
+					<?php esc_html_e( '4. Export & Import Configuration', 'wp-quiet-admin' ); ?>
+				</h3>
+				<span class="card-badge"><?php esc_html_e( 'Backup & Sync', 'wp-quiet-admin' ); ?></span>
+			</div>
+			<div class="card-summary-bar">
+				<div class="card-summary-text">
+					<span><?php esc_html_e( 'Portability:', 'wp-quiet-admin' ); ?> <strong class="summary-pill"><?php esc_html_e( 'JSON Settings Interchange', 'wp-quiet-admin' ); ?></strong></span>
+				</div>
+				<span class="card-toggle-icon dashicons dashicons-arrow-up-alt2"></span>
+			</div>
+			<div class="card-body">
+				<p class="description" style="margin-bottom: 16px;">
+					<?php esc_html_e( 'Back up your rules or transfer your "Show in Admin" pass-through whitelist and "Mute Everywhere" blacklist to another WordPress installation.', 'wp-quiet-admin' ); ?>
+				</p>
+
+				<div class="qa-portability-grid">
+					<!-- Export Box -->
+					<div class="qa-portability-box">
+						<div class="qa-portability-box-inner">
+							<h4>
+								<span class="dashicons dashicons-download"></span>
+								<?php esc_html_e( 'Export Settings', 'wp-quiet-admin' ); ?>
+							</h4>
+							<p>
+								<?php esc_html_e( 'Download a JSON file containing all plugin display rules, pass-through preferences, and retention thresholds.', 'wp-quiet-admin' ); ?>
+							</p>
+							<form method="post" action="<?php echo esc_url( admin_url( 'index.php?page=wp-quiet-admin&tab=settings' ) ); ?>">
+								<?php wp_nonce_field( 'wp_quiet_admin_export_settings', 'wp_quiet_admin_export_nonce' ); ?>
+								<button type="submit" class="button button-secondary">
+									<span class="dashicons dashicons-download"></span> <?php esc_html_e( 'Download Export (.json)', 'wp-quiet-admin' ); ?>
 								</button>
-							</div>
-						</form>
+							</form>
+						</div>
 					</div>
+
+					<!-- Import Box -->
+					<div class="qa-portability-box">
+						<div class="qa-portability-box-inner">
+							<h4>
+								<span class="dashicons dashicons-upload"></span>
+								<?php esc_html_e( 'Import Settings', 'wp-quiet-admin' ); ?>
+							</h4>
+							<p>
+								<?php esc_html_e( 'Upload a valid WP Quiet Admin JSON settings file. Imported rules will be merged with your current settings.', 'wp-quiet-admin' ); ?>
+							</p>
+							<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'index.php?page=wp-quiet-admin&tab=settings' ) ); ?>">
+								<?php wp_nonce_field( 'wp_quiet_admin_import_settings', 'wp_quiet_admin_import_nonce' ); ?>
+								<div class="qa-import-file-row">
+									<input type="file" name="import_file" accept=".json,application/json" required />
+									<button type="submit" class="button button-primary">
+										<span class="dashicons dashicons-upload"></span> <?php esc_html_e( 'Import Settings', 'wp-quiet-admin' ); ?>
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<!-- Section 5: Support Open Source Development -->

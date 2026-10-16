@@ -603,17 +603,14 @@
  * 8. Settings Section & Plugins Table
  * ---------------------------------------------------------- */
 .qa-settings-form {
-	background: #ffffff;
-	border: 1px solid #c3c4c7;
-	border-radius: 8px;
-	padding: 24px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+	background: transparent;
+	border: none;
+	padding: 0;
+	box-shadow: none;
 }
 
-.qa-settings-section {
-	margin-bottom: 30px;
-	padding-bottom: 24px;
-	border-bottom: 1px solid #f0f0f1;
+.qa-save-rules-bar {
+	margin: 20px 0 28px 0;
 }
 
 .qa-settings-section h3 {
@@ -1833,11 +1830,198 @@ button:disabled .dashicons-lock {
 }
 
 
-/* Collapsible settings sections */
-.qa-sections-toolbar { margin: 0 0 8px; font-size: 13px; }
-.qa-section-toggle { cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: space-between; }
-.qa-section-toggle:focus { outline: 2px solid #2271b1; outline-offset: 2px; }
-.qa-section-chevron { transition: transform .15s ease; color: #646970; }
-.qa-settings-section.is-collapsed .qa-section-chevron { transform: rotate(-90deg); }
-.qa-section-hidden { display: none !important; }
-.qa-settings-section.is-collapsed .qa-section-toggle { margin-bottom: 0; }
+/* -------------------------------------------------------------
+ * 18. Formula Rate Shipping Style Section Cards
+ * ---------------------------------------------------------- */
+.qa-sections-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0 0 16px 0;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.qa-sections-toolbar a {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	color: #0284c7;
+	text-decoration: none;
+	padding: 4px 10px;
+	border-radius: 6px;
+	background: #ffffff;
+	border: 1px solid #cbd5e1;
+	transition: all 0.15s ease;
+}
+
+.qa-sections-toolbar a:hover {
+	background: #f0f9ff;
+	border-color: #0284c7;
+	color: #0369a1;
+}
+
+.qa-sections-toolbar .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	line-height: 16px;
+}
+
+.qa-toolbar-sep {
+	color: #94a3b8;
+}
+
+.formula-section-card {
+	background: #ffffff !important;
+	border: 1px solid #cbd5e1 !important;
+	border-radius: 10px !important;
+	margin-bottom: 24px !important;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+	overflow: hidden !important;
+	display: block !important;
+	transition: box-shadow 0.2s ease;
+}
+
+.formula-section-card:hover {
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+.formula-section-card .card-header {
+	padding: 16px 24px !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+	color: #ffffff !important;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.formula-section-card .card-header h3 {
+	margin: 0 !important;
+	padding: 0 !important;
+	color: #ffffff !important;
+	font-size: 16px !important;
+	font-weight: 700 !important;
+	display: flex !important;
+	align-items: center !important;
+	gap: 10px !important;
+	letter-spacing: -0.2px !important;
+}
+
+.formula-section-card .card-header h3 .dashicons {
+	font-size: 20px !important;
+	width: 20px !important;
+	height: 20px !important;
+	line-height: 20px !important;
+	color: #ffffff !important;
+}
+
+/* Card Gradient Themes directly modeled on Formula Rate Shipping */
+.card-theme-general .card-header {
+	background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+}
+
+.card-theme-item-rules .card-header {
+	background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+}
+
+.card-theme-location .card-header {
+	background: linear-gradient(135deg, #047857 0%, #065f46 100%) !important;
+}
+
+.card-theme-import-export .card-header {
+	background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+}
+
+/* Card Badges in Header */
+.formula-section-card .card-header .card-badge {
+	font-size: 11px !important;
+	font-weight: 600 !important;
+	padding: 4px 12px !important;
+	border-radius: 999px !important;
+	background: rgba(255, 255, 255, 0.18) !important;
+	color: #ffffff !important;
+	text-transform: uppercase !important;
+	letter-spacing: 0.5px !important;
+	border: 1px solid rgba(255, 255, 255, 0.28) !important;
+	display: inline-block !important;
+	line-height: 1.4 !important;
+}
+
+/* Collapsible Summary Bar */
+.card-summary-bar {
+	background-color: #f8fafc !important;
+	border-bottom: 1px solid #e2e8f0 !important;
+	padding: 10px 24px !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+	cursor: pointer !important;
+	user-select: none !important;
+	transition: background-color 0.2s ease !important;
+}
+
+.card-summary-bar:hover {
+	background-color: #f1f5f9 !important;
+}
+
+.card-summary-text {
+	font-size: 12px !important;
+	font-weight: 500 !important;
+	color: #475569 !important;
+	display: flex !important;
+	align-items: center !important;
+	gap: 14px !important;
+	flex-wrap: wrap !important;
+}
+
+.card-summary-text span {
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 6px !important;
+}
+
+.card-summary-text strong.summary-pill {
+	background: #e2e8f0 !important;
+	color: #334155 !important;
+	padding: 2px 8px !important;
+	border-radius: 4px !important;
+	font-size: 11px !important;
+	font-weight: 700 !important;
+	letter-spacing: 0.2px !important;
+}
+
+.card-summary-text strong.summary-pill.summary-pill-green {
+	background: #dcfce7 !important;
+	color: #166534 !important;
+}
+
+.card-summary-text strong.summary-pill.summary-pill-red {
+	background: #fee2e2 !important;
+	color: #991b1b !important;
+}
+
+.card-toggle-icon {
+	font-size: 20px !important;
+	color: #64748b !important;
+	transition: transform 0.25s ease !important;
+	display: inline-block !important;
+	width: 20px !important;
+	height: 20px !important;
+	line-height: 20px !important;
+	text-align: center !important;
+}
+
+.formula-section-card.is-collapsed .card-toggle-icon {
+	transform: rotate(-180deg) !important;
+}
+
+/* Card Body Content */
+.formula-section-card .card-body {
+	padding: 24px 28px !important;
+	background: #ffffff !important;
+}
+
+.formula-section-card.is-collapsed .card-body {
+	display: none;
+}
